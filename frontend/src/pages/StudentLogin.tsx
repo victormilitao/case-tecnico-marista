@@ -75,7 +75,7 @@ export function StudentLoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col justify-between bg-marista-teal px-8 py-10">
+    <div className="flex min-h-screen flex-col justify-between bg-marista-teal px-4 py-6 sm:px-8 sm:py-10">
       <div className="flex items-center pt-4">
         <Link
           to="/"
@@ -88,8 +88,8 @@ export function StudentLoginPage() {
         </Link>
       </div>
 
-      <div className="mx-auto w-full max-w-md py-12 lg:py-0">
-        <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+      <div className="mx-auto w-full max-w-md py-8 sm:py-12 lg:py-0">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
           <div className="mb-6 flex items-center justify-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-marista-teal">
               <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
@@ -101,7 +101,7 @@ export function StudentLoginPage() {
             </span>
           </div>
 
-          <h1 className="mb-1 text-3xl font-bold text-marista-navy">
+          <h1 className="mb-1 text-2xl font-bold text-marista-navy sm:text-3xl">
             {step === 'identify' && 'Entrar'}
             {step === 'set-password' && 'Criar senha'}
             {step === 'login' && 'Bem-vindo de volta'}

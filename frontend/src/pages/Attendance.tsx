@@ -42,7 +42,7 @@ export function AttendancePage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-800">
+        <h1 className="text-xl font-bold text-slate-800 sm:text-2xl">
           Histórico de presença
         </h1>
         <p className="text-sm text-slate-500">
@@ -50,7 +50,7 @@ export function AttendancePage() {
         </p>
       </div>
 
-      <div className="mb-4 grid gap-3 md:grid-cols-2">
+      <div className="mb-4 grid gap-3 sm:grid-cols-2">
         <Select
           label="Filtrar por aluno"
           value={studentId}
@@ -78,7 +78,8 @@ export function AttendancePage() {
       </div>
 
       <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
-        <table className="w-full text-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[720px] text-sm">
           <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase text-slate-500">
             <tr>
               <th className="px-4 py-3">Aluno</th>
@@ -111,10 +112,10 @@ export function AttendancePage() {
                     </div>
                   </td>
                   <td className="px-4 py-3 text-slate-600">{h.room.name}</td>
-                  <td className="px-4 py-3 text-slate-600">
+                  <td className="whitespace-nowrap px-4 py-3 text-slate-600">
                     {new Date(h.checkInAt).toLocaleString()}
                   </td>
-                  <td className="px-4 py-3 text-slate-600">
+                  <td className="whitespace-nowrap px-4 py-3 text-slate-600">
                     {h.checkOutAt
                       ? new Date(h.checkOutAt).toLocaleString()
                       : '—'}
@@ -125,7 +126,7 @@ export function AttendancePage() {
                         Encerrado
                       </span>
                     ) : (
-                      <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs text-emerald-700">
+                      <span className="whitespace-nowrap rounded-full bg-emerald-100 px-2 py-0.5 text-xs text-emerald-700">
                         No ambiente
                       </span>
                     )}
@@ -134,7 +135,8 @@ export function AttendancePage() {
               ))
             )}
           </tbody>
-        </table>
+          </table>
+        </div>
       </div>
     </div>
   );
