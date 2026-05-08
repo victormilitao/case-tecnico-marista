@@ -5,14 +5,14 @@ export default {
     extend: {
       colors: {
         marista: {
-          navy: '#1c3d7a',
-          'navy-dark': '#152d5e',
-          'navy-light': '#234a93',
-          'navy-soft': '#e8eef8',
-          teal: '#1aabbc',
-          'teal-dark': '#148898',
-          'teal-light': '#e8f8fa',
-          'teal-border': '#b8e6ec',
+          navy: '#005280',
+          'navy-dark': '#003a5c',
+          'navy-light': '#1a6a9c',
+          'navy-soft': '#e6eef3',
+          teal: '#005280',
+          'teal-dark': '#003a5c',
+          'teal-light': '#e6eef3',
+          'teal-border': '#bcd5dd',
         },
       },
     },

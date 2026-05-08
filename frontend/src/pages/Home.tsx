@@ -1,6 +1,7 @@
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Icon } from '../components/Icon';
+import maristaLogo from '../assets/logo-marista-site.svg';
 
 export function HomePage() {
   const { user } = useAuth();
@@ -10,24 +11,19 @@ export function HomePage() {
   return (
     <div className="flex min-h-screen flex-col bg-slate-50">
       <header className="px-4 pt-8 pb-4 sm:px-8 sm:pt-10 sm:pb-6">
-        <div className="flex items-center justify-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-marista-navy">
-            <Icon
-              name="graduation-cap"
-              className="h-5 w-5 text-white"
-              strokeWidth={1.8}
-            />
-          </div>
-          <span className="text-sm font-semibold uppercase tracking-widest text-marista-navy">
-            Grupo Marista
-          </span>
+        <div className="flex items-center justify-center">
+          <img
+            src={maristaLogo}
+            alt="Grupo Marista"
+            className="h-16 w-auto sm:h-20"
+          />
         </div>
       </header>
 
       <main className="flex flex-1 items-center justify-center px-4 py-8 sm:px-6 sm:py-10">
         <div className="w-full max-w-4xl">
           <div className="mb-8 text-center sm:mb-10">
-            <h1 className="text-3xl font-bold text-marista-navy sm:text-4xl">
+            <h1 className="text-3xl font-bold text-marista-navy sm:text-3xl">
               Controle de Espaços
             </h1>
             <p className="mt-3 text-sm text-slate-500 sm:text-base">
@@ -38,11 +34,11 @@ export function HomePage() {
           <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
             <Link
               to="/login"
-              className="group flex flex-col items-center rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-xl sm:p-8"
+              className="group flex flex-col items-center rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm sm:p-8"
             >
-              <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-marista-navy-soft transition group-hover:scale-110">
+              <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-marista-navy-soft">
                 <Icon
-                  name="settings"
+                  name="user-cog"
                   className="h-10 w-10 text-marista-navy"
                   strokeWidth={1.5}
                 />
@@ -61,9 +57,9 @@ export function HomePage() {
 
             <Link
               to="/aluno/login"
-              className="group flex flex-col items-center rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-xl sm:p-8"
+              className="group flex flex-col items-center rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm sm:p-8"
             >
-              <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-marista-teal-light transition group-hover:scale-110">
+              <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-marista-teal-light">
                 <Icon
                   name="graduation-cap"
                   className="h-10 w-10 text-marista-teal"
@@ -86,8 +82,8 @@ export function HomePage() {
       </main>
 
       <footer className="px-8 py-6 text-center">
-        <p className="text-xs text-slate-400">
-          © {new Date().getFullYear()} Grupo Marista. Humanidade no ser. Excelência no fazer.
+        <p className="text-xs text-marista-navy">
+          Grupo Marista {new Date().getFullYear()}
         </p>
       </footer>
     </div>

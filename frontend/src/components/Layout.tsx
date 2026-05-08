@@ -46,8 +46,9 @@ export function Layout() {
             </span>
             <button
               onClick={logout}
-              className="rounded-md px-3 py-1.5 text-white/80 hover:bg-white/10 hover:text-white"
+              className="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-white/80 hover:bg-white/10 hover:text-white"
             >
+              <Icon name="log-out" className="h-4 w-4" strokeWidth={2} />
               Sair
             </button>
           </div>
@@ -91,8 +92,9 @@ export function Layout() {
                     setMenuOpen(false);
                     logout();
                   }}
-                  className="rounded-md px-3 py-1.5 text-white/80 hover:bg-white/10 hover:text-white"
+                  className="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-white/80 hover:bg-white/10 hover:text-white"
                 >
+                  <Icon name="log-out" className="h-4 w-4" strokeWidth={2} />
                   Sair
                 </button>
               </div>

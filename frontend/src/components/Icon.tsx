@@ -2,9 +2,11 @@ import {
   ArrowLeft,
   ArrowRight,
   GraduationCap,
+  LogOut,
   Menu,
   Settings,
   User,
+  UserCog,
   X,
   type LucideProps,
 } from 'lucide-react';
@@ -13,9 +15,11 @@ const icons = {
   'arrow-left': ArrowLeft,
   'arrow-right': ArrowRight,
   'graduation-cap': GraduationCap,
+  'log-out': LogOut,
   menu: Menu,
   settings: Settings,
   user: User,
+  'user-cog': UserCog,
   close: X,
 } as const;
 
