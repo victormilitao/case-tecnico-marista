@@ -79,7 +79,7 @@ export function StudentDashboardPage() {
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div className="flex min-w-0 items-center gap-2 sm:gap-3">
-            <span className="truncate text-base font-bold text-marista-navy sm:text-lg">
+            <span className="truncate text-base font-bold text-marista-teal sm:text-lg">
               Marista · Espaços
             </span>
             <span className="shrink-0 rounded-full bg-marista-teal-light px-2 py-0.5 text-xs font-semibold text-marista-teal-dark">
@@ -132,7 +132,7 @@ export function StudentDashboardPage() {
               <div className="text-xs font-semibold uppercase tracking-wider text-marista-teal-dark">
                 Você está no ambiente
               </div>
-              <div className="mt-1 break-words text-xl font-bold text-marista-navy">
+              <div className="mt-1 break-words text-xl font-bold text-marista-teal-dark">
                 {active.room.name}
               </div>
               <div className="mt-1 text-sm text-slate-500">
@@ -141,7 +141,7 @@ export function StudentDashboardPage() {
               <button
                 onClick={onCheckOut}
                 disabled={submitting}
-                className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-marista-navy px-6 py-2.5 text-sm font-bold text-white shadow-md transition hover:bg-marista-navy-dark disabled:opacity-40 sm:w-auto"
+                className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-marista-teal px-6 py-2.5 text-sm font-bold text-white shadow-md transition hover:bg-marista-teal-dark disabled:opacity-40 sm:w-auto"
               >
                 {submitting ? 'Aguarde...' : 'Registrar saída'}
               </button>
