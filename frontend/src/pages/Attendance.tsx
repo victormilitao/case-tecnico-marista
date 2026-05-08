@@ -1,24 +1,26 @@
-import { useEffect, useState } from 'react';
-import { Select } from '../components/Input';
+import { useEffect, useMemo, useState } from 'react';
+import { Button } from '../components/Button';
+import { Input, Select } from '../components/Input';
 import { attendanceApi } from '../services/attendance';
 import { roomsApi } from '../services/rooms';
-import { studentsApi } from '../services/students';
-import { Attendance, Room, Student } from '../types';
+import { Attendance, Room } from '../types';
+
+const PAGE_SIZE = 15;
 
 export function AttendancePage() {
-  const [students, setStudents] = useState<Student[]>([]);
   const [rooms, setRooms] = useState<Room[]>([]);
   const [history, setHistory] = useState<Attendance[]>([]);
-  const [studentId, setStudentId] = useState('');
+  const [studentQuery, setStudentQuery] = useState('');
+  const [debouncedStudentQuery, setDebouncedStudentQuery] = useState('');
   const [roomId, setRoomId] = useState('');
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
 
   async function loadHistory() {
     setLoading(true);
     try {
       setHistory(
         await attendanceApi.list({
-          studentId: studentId || undefined,
           roomId: roomId || undefined,
         }),
       );
@@ -28,16 +30,39 @@ export function AttendancePage() {
   }
 
   useEffect(() => {
-    Promise.all([studentsApi.list(), roomsApi.list()]).then(([s, r]) => {
-      setStudents(s);
-      setRooms(r);
-    });
+    roomsApi.list().then(setRooms);
   }, []);
+
+  useEffect(() => {
+    const id = setTimeout(() => setDebouncedStudentQuery(studentQuery), 300);
+    return () => clearTimeout(id);
+  }, [studentQuery]);
 
   useEffect(() => {
     loadHistory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [studentId, roomId]);
+  }, [roomId]);
+
+  const filteredHistory = useMemo(() => {
+    const q = debouncedStudentQuery.trim().toLowerCase();
+    if (!q) return history;
+    return history.filter(
+      (h) =>
+        h.student.name.toLowerCase().includes(q) ||
+        h.student.registration.toLowerCase().includes(q),
+    );
+  }, [history, debouncedStudentQuery]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredHistory.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const pagedHistory = filteredHistory.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE,
+  );
+
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedStudentQuery, roomId]);
 
   return (
     <div>
@@ -51,18 +76,12 @@ export function AttendancePage() {
       </div>
 
       <div className="mb-4 grid gap-3 sm:grid-cols-2">
-        <Select
+        <Input
           label="Filtrar por aluno"
-          value={studentId}
-          onChange={(e) => setStudentId(e.target.value)}
-        >
-          <option value="">Todos os alunos</option>
-          {students.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.name} ({s.registration})
-            </option>
-          ))}
-        </Select>
+          placeholder="Buscar por nome ou matrícula"
+          value={studentQuery}
+          onChange={(e) => setStudentQuery(e.target.value)}
+        />
         <Select
           label="Filtrar por ambiente"
           value={roomId}
@@ -96,14 +115,14 @@ export function AttendancePage() {
                   Carregando...
                 </td>
               </tr>
-            ) : history.length === 0 ? (
+            ) : filteredHistory.length === 0 ? (
               <tr>
                 <td colSpan={5} className="px-4 py-6 text-center text-slate-400">
                   Nenhum registro encontrado
                 </td>
               </tr>
             ) : (
-              history.map((h) => (
+              pagedHistory.map((h) => (
                 <tr key={h.id}>
                   <td className="px-4 py-3 text-slate-800">
                     {h.student.name}
@@ -137,6 +156,34 @@ export function AttendancePage() {
           </tbody>
           </table>
         </div>
+        {!loading && filteredHistory.length > 0 && (
+          <div className="flex flex-col items-center justify-between gap-2 border-t border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600 sm:flex-row">
+            <span>
+              Mostrando {(currentPage - 1) * PAGE_SIZE + 1}–
+              {Math.min(currentPage * PAGE_SIZE, filteredHistory.length)} de{' '}
+              {filteredHistory.length}
+            </span>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="secondary"
+                disabled={currentPage <= 1}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+              >
+                Anterior
+              </Button>
+              <span>
+                Página {currentPage} de {totalPages}
+              </span>
+              <Button
+                variant="secondary"
+                disabled={currentPage >= totalPages}
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              >
+                Próxima
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

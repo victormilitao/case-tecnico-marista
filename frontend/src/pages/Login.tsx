@@ -5,6 +5,7 @@ import { authApi } from '../services/auth';
 import { TOKEN_KEY } from '../services/api';
 import { getApiErrorMessage } from '../lib/errors';
 import { Icon } from '../components/Icon';
+import maristaLogo from '../assets/logo-marista-site.svg';
 
 export function LoginPage() {
   const { user, login } = useAuth();
@@ -55,15 +56,10 @@ export function LoginPage() {
         {/* Formulário */}
         <div className="mx-auto w-full max-w-md py-8 sm:py-12 lg:py-0">
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-            <div className="mb-6 flex items-center justify-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-marista-navy">
-                <Icon name="graduation-cap" className="h-5 w-5 text-white" strokeWidth={1.8} />
-              </div>
-              <span className="text-sm font-semibold uppercase tracking-widest text-marista-navy">
-                Grupo Marista
-              </span>
+            <div className="mb-6 flex justify-center">
+              <img src={maristaLogo} alt="Grupo Marista" className="h-12 w-auto sm:h-14" />
             </div>
-            <h1 className="mb-1 text-2xl font-bold text-marista-navy sm:text-3xl">
+            <h1 className="mb-1 text-2xl font-bold text-marista-navy sm:text-2xl">
               {mode === 'login' ? 'Área administrativa' : 'Criar conta'}
             </h1>
             <p className="mb-8 text-sm text-slate-500">
@@ -148,8 +144,8 @@ export function LoginPage() {
         </div>
 
         {/* Rodapé */}
-        <p className="text-xs text-center text-white/25">
-          © {new Date().getFullYear()} Grupo Marista. Todos os direitos reservados.
+        <p className="text-xs text-center text-white">
+          Grupo Marista {new Date().getFullYear()}
         </p>
 
     </div>

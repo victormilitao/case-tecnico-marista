@@ -1,5 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { Icon } from '../components/Icon';
 import { Select } from '../components/Input';
 import { meApi, MyAttendance, MyStatus } from '../services/me';
 import { Room, ROOM_TYPE_LABELS } from '../types';
@@ -87,18 +88,19 @@ export function StudentDashboardPage() {
             </span>
           </div>
           <div className="flex items-center gap-2 text-sm sm:gap-3">
-            <div className="min-w-0 text-right">
-              <div className="truncate font-medium text-white">
+            <div className="flex min-w-0 items-baseline gap-2">
+              <span className="truncate font-medium text-white">
                 {user?.name}
-              </div>
-              <div className="truncate font-mono text-xs text-white/70">
+              </span>
+              <span className="shrink-0 font-mono text-xs text-white/70">
                 {user?.registration}
-              </div>
+              </span>
             </div>
             <button
               onClick={logout}
-              className="shrink-0 rounded-md px-3 py-1.5 text-white/80 hover:bg-white/10 hover:text-white"
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-md px-3 py-1.5 text-white/80 hover:bg-white/10 hover:text-white"
             >
+              <Icon name="log-out" className="h-4 w-4" strokeWidth={2} />
               Sair
             </button>
           </div>
