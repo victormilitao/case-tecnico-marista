@@ -3,6 +3,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { authApi } from '../services/auth';
 import { getApiErrorMessage } from '../lib/errors';
+import { Icon } from '../components/Icon';
 
 type Step = 'identify' | 'set-password' | 'login';
 
@@ -81,9 +82,7 @@ export function StudentLoginPage() {
           to="/"
           className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/20"
         >
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-          </svg>
+          <Icon name="arrow-left" className="h-4 w-4" strokeWidth={2.5} />
           Voltar
         </Link>
       </div>
@@ -92,9 +91,7 @@ export function StudentLoginPage() {
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
           <div className="mb-6 flex items-center justify-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-marista-teal">
-              <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.438 60.438 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.636 50.636 0 00-2.658-.813A59.906 59.906 0 0112 3.493a59.903 59.903 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0112 13.489a50.702 50.702 0 017.74-3.342" />
-              </svg>
+              <Icon name="graduation-cap" className="h-5 w-5 text-white" strokeWidth={1.8} />
             </div>
             <span className="text-sm font-semibold uppercase tracking-widest text-marista-navy">
               Área do aluno

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { roomsApi } from '../services/rooms';
 import { Occupancy, ROOM_TYPE_LABELS } from '../types';
+import { Icon } from '../components/Icon';
 
 function rateColor(rate: number) {
   if (rate >= 1) return 'bg-rose-500';
@@ -37,7 +38,7 @@ export function DashboardPage() {
         <div>
           <h1 className="text-xl font-bold text-slate-800 sm:text-2xl">Dashboard</h1>
           <p className="text-sm text-slate-500">
-            Atualiza automaticamente a cada 15 segundos
+            Ocupação dos ambientes de ensino
           </p>
         </div>
         {!loading && (
@@ -92,10 +93,10 @@ export function DashboardPage() {
               {d.occupants.length > 0 && (
                 <ul className="mt-4 space-y-1 text-xs text-slate-600">
                   {d.occupants.slice(0, 5).map((o) => (
-                    <li key={o.attendanceId}>
+                    <li key={o.attendanceId} className="flex items-center gap-1.5">
+                      <Icon name="user" className="h-3.5 w-3.5 text-slate-400" />
                       <span className="font-medium">{o.student.name}</span>
                       <span className="text-slate-400">
-                        {' '}
                         · desde{' '}
                         {new Date(o.checkInAt).toLocaleTimeString([], {
                           hour: '2-digit',

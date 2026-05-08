@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { Icon } from './Icon';
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard' },
@@ -57,27 +58,11 @@ export function Layout() {
             aria-expanded={menuOpen}
             className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-slate-600 hover:bg-slate-100 md:hidden"
           >
-            <svg
+            <Icon
+              name={menuOpen ? 'close' : 'menu'}
               className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
               strokeWidth={2}
-            >
-              {menuOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
+            />
           </button>
         </div>
         {menuOpen && (
