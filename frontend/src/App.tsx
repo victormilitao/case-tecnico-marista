@@ -1,14 +1,39 @@
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+} from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import { Layout } from './components/Layout';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { HomePage } from './pages/Home';
+import { LoginPage } from './pages/Login';
+import { KioskPage } from './pages/Kiosk';
+import { DashboardPage } from './pages/Dashboard';
+import { StudentsPage } from './pages/Students';
+import { RoomsPage } from './pages/Rooms';
+import { AttendancePage } from './pages/Attendance';
+
 export default function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold text-slate-800">
-          Controle de Espaços de Ensino
-        </h1>
-        <p className="mt-2 text-slate-600">
-          Frontend pronto. Próxima fase: telas de login e CRUDs.
-        </p>
-      </div>
-    </div>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/kiosk" element={<KioskPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route element={<ProtectedRoute />}>
+            <Route element={<Layout />}>
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/attendance" element={<AttendancePage />} />
+              <Route path="/students" element={<StudentsPage />} />
+              <Route path="/rooms" element={<RoomsPage />} />
+            </Route>
+          </Route>
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
