@@ -33,16 +33,16 @@ export function DashboardPage() {
 
   return (
     <div>
-      <div className="mb-6 flex items-end justify-between">
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Dashboard</h1>
+          <h1 className="text-xl font-bold text-slate-800 sm:text-2xl">Dashboard</h1>
           <p className="text-sm text-slate-500">
             Atualiza automaticamente a cada 15 segundos
           </p>
         </div>
         {!loading && (
           <div className="text-right">
-            <div className="text-3xl font-bold text-slate-800">
+            <div className="text-2xl font-bold text-slate-800 sm:text-3xl">
               {totalOccupied}/{totalCapacity}
             </div>
             <div className="text-xs uppercase text-slate-500">
@@ -59,7 +59,7 @@ export function DashboardPage() {
           Nenhum ambiente cadastrado.
         </div>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {data.map((d) => (
             <div
               key={d.room.id}

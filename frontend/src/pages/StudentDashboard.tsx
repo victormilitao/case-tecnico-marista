@@ -77,25 +77,27 @@ export function StudentDashboardPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3">
-          <div className="flex items-center gap-3">
-            <span className="text-lg font-bold text-marista-teal">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
+          <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+            <span className="truncate text-base font-bold text-marista-teal sm:text-lg">
               Marista · Espaços
             </span>
-            <span className="rounded-full bg-marista-teal-light px-2 py-0.5 text-xs font-semibold text-marista-teal-dark">
+            <span className="shrink-0 rounded-full bg-marista-teal-light px-2 py-0.5 text-xs font-semibold text-marista-teal-dark">
               Aluno
             </span>
           </div>
-          <div className="flex items-center gap-3 text-sm">
-            <div className="text-right">
-              <div className="font-medium text-slate-700">{user?.name}</div>
-              <div className="font-mono text-xs text-slate-400">
+          <div className="flex items-center gap-2 text-sm sm:gap-3">
+            <div className="min-w-0 text-right">
+              <div className="truncate font-medium text-slate-700">
+                {user?.name}
+              </div>
+              <div className="truncate font-mono text-xs text-slate-400">
                 {user?.registration}
               </div>
             </div>
             <button
               onClick={logout}
-              className="rounded-md px-3 py-1.5 text-slate-500 hover:bg-slate-100"
+              className="shrink-0 rounded-md px-3 py-1.5 text-slate-500 hover:bg-slate-100"
             >
               Sair
             </button>
@@ -103,9 +105,9 @@ export function StudentDashboardPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl space-y-6 px-6 py-8">
-        <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h1 className="text-2xl font-bold text-slate-800">
+      <main className="mx-auto max-w-5xl space-y-6 px-4 py-6 sm:px-6 sm:py-8">
+        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+          <h1 className="text-xl font-bold text-slate-800 sm:text-2xl">
             Olá, {user?.name?.split(' ')[0]}!
           </h1>
           <p className="text-sm text-slate-500">
@@ -130,7 +132,7 @@ export function StudentDashboardPage() {
               <div className="text-xs font-semibold uppercase tracking-wider text-marista-teal-dark">
                 Você está no ambiente
               </div>
-              <div className="mt-1 text-xl font-bold text-marista-teal-dark">
+              <div className="mt-1 break-words text-xl font-bold text-marista-teal-dark">
                 {active.room.name}
               </div>
               <div className="mt-1 text-sm text-slate-500">
@@ -139,7 +141,7 @@ export function StudentDashboardPage() {
               <button
                 onClick={onCheckOut}
                 disabled={submitting}
-                className="mt-4 inline-flex items-center gap-2 rounded-full bg-marista-teal px-6 py-2.5 text-sm font-bold text-white shadow-md transition hover:bg-marista-teal-dark disabled:opacity-40"
+                className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-marista-teal px-6 py-2.5 text-sm font-bold text-white shadow-md transition hover:bg-marista-teal-dark disabled:opacity-40 sm:w-auto"
               >
                 {submitting ? 'Aguarde...' : 'Registrar saída'}
               </button>
@@ -162,7 +164,7 @@ export function StudentDashboardPage() {
               <button
                 type="submit"
                 disabled={submitting || !roomId}
-                className="inline-flex items-center gap-2 rounded-full bg-marista-teal px-6 py-2.5 text-sm font-bold text-white shadow-md transition hover:bg-marista-teal-dark disabled:opacity-40"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-marista-teal px-6 py-2.5 text-sm font-bold text-white shadow-md transition hover:bg-marista-teal-dark disabled:opacity-40 sm:w-auto"
               >
                 {submitting ? 'Aguarde...' : 'Registrar entrada'}
               </button>
@@ -181,56 +183,58 @@ export function StudentDashboardPage() {
           </div>
 
           <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
-            <table className="w-full text-sm">
-              <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase text-slate-500">
-                <tr>
-                  <th className="px-4 py-3">Ambiente</th>
-                  <th className="px-4 py-3">Entrada</th>
-                  <th className="px-4 py-3">Saída</th>
-                  <th className="px-4 py-3">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {loading ? (
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[640px] text-sm">
+                <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase text-slate-500">
                   <tr>
-                    <td colSpan={4} className="px-4 py-6 text-center text-slate-400">
-                      Carregando...
-                    </td>
+                    <th className="px-4 py-3">Ambiente</th>
+                    <th className="px-4 py-3">Entrada</th>
+                    <th className="px-4 py-3">Saída</th>
+                    <th className="px-4 py-3">Status</th>
                   </tr>
-                ) : history.length === 0 ? (
-                  <tr>
-                    <td colSpan={4} className="px-4 py-6 text-center text-slate-400">
-                      Você ainda não tem registros.
-                    </td>
-                  </tr>
-                ) : (
-                  history.map((h) => (
-                    <tr key={h.id}>
-                      <td className="px-4 py-3 text-slate-800">{h.room.name}</td>
-                      <td className="px-4 py-3 text-slate-600">
-                        {new Date(h.checkInAt).toLocaleString()}
-                      </td>
-                      <td className="px-4 py-3 text-slate-600">
-                        {h.checkOutAt
-                          ? new Date(h.checkOutAt).toLocaleString()
-                          : '—'}
-                      </td>
-                      <td className="px-4 py-3">
-                        {h.checkOutAt ? (
-                          <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
-                            Encerrado
-                          </span>
-                        ) : (
-                          <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs text-emerald-700">
-                            No ambiente
-                          </span>
-                        )}
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {loading ? (
+                    <tr>
+                      <td colSpan={4} className="px-4 py-6 text-center text-slate-400">
+                        Carregando...
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ) : history.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className="px-4 py-6 text-center text-slate-400">
+                        Você ainda não tem registros.
+                      </td>
+                    </tr>
+                  ) : (
+                    history.map((h) => (
+                      <tr key={h.id}>
+                        <td className="px-4 py-3 text-slate-800">{h.room.name}</td>
+                        <td className="px-4 py-3 whitespace-nowrap text-slate-600">
+                          {new Date(h.checkInAt).toLocaleString()}
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap text-slate-600">
+                          {h.checkOutAt
+                            ? new Date(h.checkOutAt).toLocaleString()
+                            : '—'}
+                        </td>
+                        <td className="px-4 py-3">
+                          {h.checkOutAt ? (
+                            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
+                              Encerrado
+                            </span>
+                          ) : (
+                            <span className="whitespace-nowrap rounded-full bg-emerald-100 px-2 py-0.5 text-xs text-emerald-700">
+                              No ambiente
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </section>
       </main>
