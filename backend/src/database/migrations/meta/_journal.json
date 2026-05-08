@@ -8,6 +8,13 @@
       "when": 1778183037885,
       "tag": "0000_lethal_shard",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1778444800000,
+      "tag": "0001_add_student_password",
+      "breakpoints": true
     }
   ]
 }

@@ -46,7 +46,7 @@ export function AttendancePage() {
           Histórico de presença
         </h1>
         <p className="text-sm text-slate-500">
-          Visualização dos registros feitos pelos alunos no totem público.
+          Visualização dos registros de entrada e saída feitos pelos alunos.
         </p>
       </div>
 

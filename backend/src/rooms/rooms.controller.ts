@@ -12,7 +12,9 @@ import { AttendanceService } from '../attendance/attendance.service';
 import { RoomsService } from './rooms.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
+import { Roles } from '../auth/roles.decorator';
 
+@Roles('admin')
 @Controller('rooms')
 export class RoomsController {
   constructor(

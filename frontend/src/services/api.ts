@@ -14,13 +14,27 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+const AUTH_ATTEMPT_PATHS = [
+  '/auth/login',
+  '/auth/register',
+  '/auth/student/login',
+  '/auth/student/set-password',
+];
+
+function isAuthAttempt(url?: string) {
+  if (!url) return false;
+  return AUTH_ATTEMPT_PATHS.some((p) => url.endsWith(p));
+}
+
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && !isAuthAttempt(error.config?.url)) {
       localStorage.removeItem(TOKEN_KEY);
-      if (window.location.pathname !== '/login') {
-        window.location.href = '/login';
+      const path = window.location.pathname;
+      const target = path.startsWith('/aluno') ? '/aluno/login' : '/login';
+      if (path !== target) {
+        window.location.href = target;
       }
     }
     return Promise.reject(error);
