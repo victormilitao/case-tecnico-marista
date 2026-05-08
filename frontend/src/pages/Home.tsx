@@ -1,25 +1,16 @@
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
-const NAVY = '#1c3d7a';
-const NAVY_DARK = '#152d5e';
-const TEAL = '#1aabbc';
-const TEAL_DARK = '#148898';
-const NAVY_LIGHT = '#e8eef8';
-const TEAL_LIGHT = '#e8f8fa';
-
 export function HomePage() {
   const { user } = useAuth();
-  if (user) return <Navigate to="/dashboard" replace />;
+  if (user?.role === 'admin') return <Navigate to="/dashboard" replace />;
+  if (user?.role === 'student') return <Navigate to="/aluno" replace />;
 
   return (
     <div className="flex min-h-screen flex-col bg-slate-50">
       <header className="px-8 pt-10 pb-6">
         <div className="flex items-center justify-center gap-3">
-          <div
-            className="flex h-10 w-10 items-center justify-center rounded-full"
-            style={{ backgroundColor: NAVY }}
-          >
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-marista-navy">
             <svg
               className="h-5 w-5 text-white"
               fill="none"
@@ -34,10 +25,7 @@ export function HomePage() {
               />
             </svg>
           </div>
-          <span
-            className="text-sm font-semibold uppercase tracking-widest"
-            style={{ color: NAVY }}
-          >
+          <span className="text-sm font-semibold uppercase tracking-widest text-marista-navy">
             Grupo Marista
           </span>
         </div>
@@ -46,7 +34,7 @@ export function HomePage() {
       <main className="flex flex-1 items-center justify-center px-6 py-10">
         <div className="w-full max-w-4xl">
           <div className="mb-10 text-center">
-            <h1 className="text-4xl font-bold" style={{ color: NAVY }}>
+            <h1 className="text-4xl font-bold text-marista-navy">
               Controle de Espaços
             </h1>
             <p className="mt-3 text-base text-slate-500">
@@ -59,13 +47,9 @@ export function HomePage() {
               to="/login"
               className="group flex flex-col items-center rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
             >
-              <div
-                className="mb-5 flex h-20 w-20 items-center justify-center rounded-full transition group-hover:scale-110"
-                style={{ backgroundColor: NAVY_LIGHT }}
-              >
+              <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-marista-navy-soft transition group-hover:scale-110">
                 <svg
-                  className="h-10 w-10"
-                  style={{ color: NAVY }}
+                  className="h-10 w-10 text-marista-navy"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -83,22 +67,13 @@ export function HomePage() {
                   />
                 </svg>
               </div>
-              <h2 className="mb-2 text-2xl font-bold" style={{ color: NAVY }}>
+              <h2 className="mb-2 text-2xl font-bold text-marista-navy">
                 Área administrativa
               </h2>
               <p className="mb-6 text-sm text-slate-500">
                 Gerencie alunos, ambientes e visualize relatórios de presença.
               </p>
-              <span
-                className="mt-auto inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-bold text-white shadow-md transition"
-                style={{ backgroundColor: NAVY }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.backgroundColor = NAVY_DARK)
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.backgroundColor = NAVY)
-                }
-              >
+              <span className="mt-auto inline-flex items-center gap-2 rounded-full bg-marista-navy px-6 py-2.5 text-sm font-bold text-white shadow-md transition group-hover:bg-marista-navy-dark">
                 Entrar
                 <svg
                   className="h-4 w-4"
@@ -117,16 +92,12 @@ export function HomePage() {
             </Link>
 
             <Link
-              to="/kiosk"
+              to="/aluno/login"
               className="group flex flex-col items-center rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
             >
-              <div
-                className="mb-5 flex h-20 w-20 items-center justify-center rounded-full transition group-hover:scale-110"
-                style={{ backgroundColor: TEAL_LIGHT }}
-              >
+              <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-marista-teal-light transition group-hover:scale-110">
                 <svg
-                  className="h-10 w-10"
-                  style={{ color: TEAL }}
+                  className="h-10 w-10 text-marista-teal"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -139,22 +110,13 @@ export function HomePage() {
                   />
                 </svg>
               </div>
-              <h2 className="mb-2 text-2xl font-bold" style={{ color: NAVY }}>
+              <h2 className="mb-2 text-2xl font-bold text-marista-navy">
                 Área do aluno
               </h2>
               <p className="mb-6 text-sm text-slate-500">
                 Registre sua entrada e saída nos ambientes de ensino.
               </p>
-              <span
-                className="mt-auto inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-bold text-white shadow-md transition"
-                style={{ backgroundColor: TEAL }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.backgroundColor = TEAL_DARK)
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.backgroundColor = TEAL)
-                }
-              >
+              <span className="mt-auto inline-flex items-center gap-2 rounded-full bg-marista-teal px-6 py-2.5 text-sm font-bold text-white shadow-md transition group-hover:bg-marista-teal-dark">
                 Entrar
                 <svg
                   className="h-4 w-4"

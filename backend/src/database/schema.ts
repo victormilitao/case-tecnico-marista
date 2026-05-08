@@ -29,6 +29,7 @@ export const students = pgTable('students', {
   registration: varchar('registration', { length: 32 }).notNull().unique(),
   name: varchar('name', { length: 160 }).notNull(),
   email: varchar('email', { length: 160 }).notNull().unique(),
+  passwordHash: varchar('password_hash', { length: 255 }),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),

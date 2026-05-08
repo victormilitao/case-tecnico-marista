@@ -23,7 +23,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       <input
         ref={ref}
         {...props}
-        className={`w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 ${className}`}
+        className={`w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-marista-navy focus:outline-none focus:ring-1 focus:ring-marista-navy ${className}`}
       />
       {error && (
         <span className="mt-1 block text-xs text-rose-600">{error}</span>
@@ -51,7 +51,7 @@ export function Select({
       )}
       <select
         {...props}
-        className={`w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 ${className}`}
+        className={`w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-marista-navy focus:outline-none focus:ring-1 focus:ring-marista-navy ${className}`}
       >
         {children}
       </select>

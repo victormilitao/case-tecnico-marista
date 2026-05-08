@@ -1,7 +1,11 @@
+export type AuthRole = 'admin' | 'student';
+
 export interface User {
   id: string;
   name: string;
   email: string;
+  role: AuthRole;
+  registration?: string;
 }
 
 export interface Student {

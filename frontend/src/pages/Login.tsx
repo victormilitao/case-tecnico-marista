@@ -5,9 +5,6 @@ import { authApi } from '../services/auth';
 import { TOKEN_KEY } from '../services/api';
 import { getApiErrorMessage } from '../lib/errors';
 
-const NAVY = '#1c3d7a';
-const NAVY_DARK = '#152d5e';
-
 export function LoginPage() {
   const { user, login } = useAuth();
   const navigate = useNavigate();
@@ -18,7 +15,8 @@ export function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  if (user) return <Navigate to="/dashboard" replace />;
+  if (user?.role === 'admin') return <Navigate to="/dashboard" replace />;
+  if (user?.role === 'student') return <Navigate to="/aluno" replace />;
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -41,18 +39,12 @@ export function LoginPage() {
   }
 
   return (
-    <div
-      className="flex min-h-screen flex-col justify-between px-8 py-10"
-      style={{ backgroundColor: NAVY }}
-    >
+    <div className="flex min-h-screen flex-col justify-between bg-marista-navy px-8 py-10">
         {/* Header com voltar */}
         <div className="flex items-center pt-4">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white transition"
-            style={{ backgroundColor: 'rgba(255,255,255,0.12)' }}
-            onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.22)')}
-            onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.12)')}
+            className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/20"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
@@ -65,16 +57,16 @@ export function LoginPage() {
         <div className="mx-auto w-full max-w-md py-12 lg:py-0">
           <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
             <div className="mb-6 flex items-center justify-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full" style={{ backgroundColor: NAVY }}>
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-marista-navy">
                 <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.438 60.438 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.636 50.636 0 00-2.658-.813A59.906 59.906 0 0112 3.493a59.903 59.903 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
                 </svg>
               </div>
-              <span className="text-sm font-semibold uppercase tracking-widest" style={{ color: NAVY }}>
+              <span className="text-sm font-semibold uppercase tracking-widest text-marista-navy">
                 Grupo Marista
               </span>
             </div>
-            <h1 className="mb-1 text-3xl font-bold" style={{ color: NAVY }}>
+            <h1 className="mb-1 text-3xl font-bold text-marista-navy">
               {mode === 'login' ? 'Área administrativa' : 'Criar conta'}
             </h1>
             <p className="mb-8 text-sm text-slate-500">
@@ -96,9 +88,7 @@ export function LoginPage() {
                     required
                     autoFocus
                     placeholder="Seu nome completo"
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400"
-                    onFocus={e => e.currentTarget.style.borderColor = NAVY}
-                    onBlur={e => e.currentTarget.style.borderColor = '#e2e8f0'}
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-marista-navy"
                   />
                 </label>
               )}
@@ -114,9 +104,7 @@ export function LoginPage() {
                   required
                   autoFocus={mode === 'login'}
                   placeholder="seu@email.com"
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400"
-                  onFocus={e => e.currentTarget.style.borderColor = NAVY}
-                  onBlur={e => e.currentTarget.style.borderColor = '#e2e8f0'}
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-marista-navy"
                 />
               </label>
 
@@ -131,9 +119,7 @@ export function LoginPage() {
                   required
                   minLength={8}
                   placeholder="••••••••"
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400"
-                  onFocus={e => e.currentTarget.style.borderColor = NAVY}
-                  onBlur={e => e.currentTarget.style.borderColor = '#e2e8f0'}
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-marista-navy"
                 />
               </label>
 
@@ -146,10 +132,7 @@ export function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-full py-3 text-sm font-bold text-white shadow-md transition disabled:opacity-40"
-                style={{ backgroundColor: NAVY }}
-                onMouseEnter={e => !loading && (e.currentTarget.style.backgroundColor = NAVY_DARK)}
-                onMouseLeave={e => (e.currentTarget.style.backgroundColor = NAVY)}
+                className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-full bg-marista-navy py-3 text-sm font-bold text-white shadow-md transition hover:bg-marista-navy-dark disabled:opacity-40 disabled:hover:bg-marista-navy"
               >
                 {loading ? 'Aguarde...' : mode === 'login' ? 'Entrar' : 'Criar conta'}
                 {!loading && (
@@ -170,7 +153,7 @@ export function LoginPage() {
         </div>
 
         {/* Rodapé */}
-        <p className="text-xs text-center" style={{ color: 'rgba(255,255,255,0.25)' }}>
+        <p className="text-xs text-center text-white/25">
           © {new Date().getFullYear()} Grupo Marista. Todos os direitos reservados.
         </p>
 
