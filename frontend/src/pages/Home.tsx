@@ -9,7 +9,7 @@ export function HomePage() {
   if (user?.role === 'student') return <Navigate to="/aluno" replace />;
 
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className="flex min-h-screen flex-col bg-slate-50">
       <header className="px-4 pt-8 pb-4 sm:px-8 sm:pt-10 sm:pb-6">
         <div className="flex items-center justify-center">
           <img

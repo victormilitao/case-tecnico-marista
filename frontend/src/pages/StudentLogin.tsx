@@ -77,11 +77,11 @@ export function StudentLoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col justify-between bg-marista-teal px-4 py-6 sm:px-8 sm:py-10">
+    <div className="flex min-h-screen flex-col justify-between bg-slate-50 px-4 py-6 sm:px-8 sm:py-10">
       <div className="flex items-center pt-4">
         <Link
           to="/"
-          className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/20"
+          className="inline-flex items-center gap-2 rounded-full bg-marista-navy/10 px-4 py-2 text-sm font-semibold text-marista-navy transition hover:bg-marista-navy/20"
         >
           <Icon name="arrow-left" className="h-4 w-4" strokeWidth={2.5} />
           Voltar
@@ -243,7 +243,7 @@ export function StudentLoginPage() {
         </div>
       </div>
 
-      <p className="text-xs text-center text-white">
+      <p className="text-xs text-center text-marista-navy">
         Grupo Marista {new Date().getFullYear()}
       </p>
     </div>
