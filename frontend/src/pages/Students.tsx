@@ -85,13 +85,14 @@ export function StudentsPage() {
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-800">Alunos</h1>
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-xl font-bold text-slate-800 sm:text-2xl">Alunos</h1>
         <Button onClick={openCreate}>+ Novo aluno</Button>
       </div>
 
       <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
-        <table className="w-full text-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[640px] text-sm">
           <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase text-slate-500">
             <tr>
               <th className="px-4 py-3">Matrícula</th>
@@ -121,7 +122,7 @@ export function StudentsPage() {
                   </td>
                   <td className="px-4 py-3 text-slate-800">{s.name}</td>
                   <td className="px-4 py-3 text-slate-600">{s.email}</td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="whitespace-nowrap px-4 py-3 text-right">
                     <Button
                       variant="ghost"
                       onClick={() => openEdit(s)}
@@ -141,7 +142,8 @@ export function StudentsPage() {
               ))
             )}
           </tbody>
-        </table>
+          </table>
+        </div>
       </div>
 
       <Modal
