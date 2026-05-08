@@ -8,7 +8,7 @@ export function HomePage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-slate-50">
-      <header className="px-8 pt-10 pb-6">
+      <header className="px-4 pt-8 pb-4 sm:px-8 sm:pt-10 sm:pb-6">
         <div className="flex items-center justify-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-marista-navy">
             <svg
@@ -31,21 +31,21 @@ export function HomePage() {
         </div>
       </header>
 
-      <main className="flex flex-1 items-center justify-center px-6 py-10">
+      <main className="flex flex-1 items-center justify-center px-4 py-8 sm:px-6 sm:py-10">
         <div className="w-full max-w-4xl">
-          <div className="mb-10 text-center">
-            <h1 className="text-4xl font-bold text-marista-navy">
+          <div className="mb-8 text-center sm:mb-10">
+            <h1 className="text-3xl font-bold text-marista-navy sm:text-4xl">
               Controle de Espaços
             </h1>
-            <p className="mt-3 text-base text-slate-500">
+            <p className="mt-3 text-sm text-slate-500 sm:text-base">
               Selecione como deseja continuar
             </p>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
             <Link
               to="/login"
-              className="group flex flex-col items-center rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+              className="group flex flex-col items-center rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-xl sm:p-8"
             >
               <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-marista-navy-soft transition group-hover:scale-110">
                 <svg
@@ -93,7 +93,7 @@ export function HomePage() {
 
             <Link
               to="/aluno/login"
-              className="group flex flex-col items-center rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+              className="group flex flex-col items-center rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-xl sm:p-8"
             >
               <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-marista-teal-light transition group-hover:scale-110">
                 <svg
