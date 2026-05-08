@@ -76,28 +76,28 @@ export function StudentDashboardPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="border-b border-slate-200 bg-white">
+      <header className="bg-marista-teal">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div className="flex min-w-0 items-center gap-2 sm:gap-3">
-            <span className="truncate text-base font-bold text-marista-teal sm:text-lg">
+            <span className="truncate text-base font-bold text-white sm:text-lg">
               Marista · Espaços
             </span>
-            <span className="shrink-0 rounded-full bg-marista-teal-light px-2 py-0.5 text-xs font-semibold text-marista-teal-dark">
+            <span className="shrink-0 rounded-full bg-white/20 px-2 py-0.5 text-xs font-semibold text-white">
               Aluno
             </span>
           </div>
           <div className="flex items-center gap-2 text-sm sm:gap-3">
             <div className="min-w-0 text-right">
-              <div className="truncate font-medium text-slate-700">
+              <div className="truncate font-medium text-white">
                 {user?.name}
               </div>
-              <div className="truncate font-mono text-xs text-slate-400">
+              <div className="truncate font-mono text-xs text-white/70">
                 {user?.registration}
               </div>
             </div>
             <button
               onClick={logout}
-              className="shrink-0 rounded-md px-3 py-1.5 text-slate-500 hover:bg-slate-100"
+              className="shrink-0 rounded-md px-3 py-1.5 text-white/80 hover:bg-white/10 hover:text-white"
             >
               Sair
             </button>
