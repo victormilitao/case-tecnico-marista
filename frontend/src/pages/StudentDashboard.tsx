@@ -79,7 +79,7 @@ export function StudentDashboardPage() {
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3">
           <div className="flex items-center gap-3">
-            <span className="text-lg font-bold text-marista-navy">
+            <span className="text-lg font-bold text-marista-teal">
               Marista · Espaços
             </span>
             <span className="rounded-full bg-marista-teal-light px-2 py-0.5 text-xs font-semibold text-marista-teal-dark">
@@ -130,7 +130,7 @@ export function StudentDashboardPage() {
               <div className="text-xs font-semibold uppercase tracking-wider text-marista-teal-dark">
                 Você está no ambiente
               </div>
-              <div className="mt-1 text-xl font-bold text-marista-navy">
+              <div className="mt-1 text-xl font-bold text-marista-teal-dark">
                 {active.room.name}
               </div>
               <div className="mt-1 text-sm text-slate-500">
@@ -139,7 +139,7 @@ export function StudentDashboardPage() {
               <button
                 onClick={onCheckOut}
                 disabled={submitting}
-                className="mt-4 inline-flex items-center gap-2 rounded-full bg-marista-navy px-6 py-2.5 text-sm font-bold text-white shadow-md transition hover:bg-marista-navy-dark disabled:opacity-40"
+                className="mt-4 inline-flex items-center gap-2 rounded-full bg-marista-teal px-6 py-2.5 text-sm font-bold text-white shadow-md transition hover:bg-marista-teal-dark disabled:opacity-40"
               >
                 {submitting ? 'Aguarde...' : 'Registrar saída'}
               </button>
