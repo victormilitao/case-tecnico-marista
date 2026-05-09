@@ -11,6 +11,7 @@ import {
 import { StudentsService } from './students.service';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
+import { Audit } from '../audit/audit.decorator';
 import { Roles } from '../auth/roles.decorator';
 
 @Roles('admin')
@@ -18,6 +19,7 @@ import { Roles } from '../auth/roles.decorator';
 export class StudentsController {
   constructor(private readonly studentsService: StudentsService) {}
 
+  @Audit('student', 'create')
   @Post()
   create(@Body() dto: CreateStudentDto) {
     return this.studentsService.create(dto);
@@ -33,6 +35,7 @@ export class StudentsController {
     return this.studentsService.findOne(id);
   }
 
+  @Audit('student', 'update')
   @Patch(':id')
   update(
     @Param('id', ParseUUIDPipe) id: string,
@@ -41,6 +44,7 @@ export class StudentsController {
     return this.studentsService.update(id, dto);
   }
 
+  @Audit('student', 'delete')
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.studentsService.remove(id);

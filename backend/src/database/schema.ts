@@ -5,6 +5,8 @@ import {
   timestamp,
   integer,
   pgEnum,
+  jsonb,
+  index,
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
@@ -12,6 +14,12 @@ export const roomTypeEnum = pgEnum('room_type', [
   'classroom',
   'laboratory',
   'study_room',
+]);
+
+export const auditActionEnum = pgEnum('audit_action', [
+  'create',
+  'update',
+  'delete',
 ]);
 
 export const users = pgTable('users', {
@@ -81,5 +89,34 @@ export const attendancesRelations = relations(attendances, ({ one }) => ({
   room: one(rooms, {
     fields: [attendances.roomId],
     references: [rooms.id],
+  }),
+}));
+
+export const auditLogs = pgTable(
+  'audit_logs',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id').references(() => users.id, {
+      onDelete: 'set null',
+    }),
+    userEmail: varchar('user_email', { length: 160 }).notNull(),
+    action: auditActionEnum('action').notNull(),
+    entity: varchar('entity', { length: 64 }).notNull(),
+    entityId: uuid('entity_id'),
+    payload: jsonb('payload'),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => ({
+    createdAtIdx: index('audit_logs_created_at_idx').on(table.createdAt),
+    entityIdx: index('audit_logs_entity_idx').on(table.entity, table.entityId),
+  }),
+);
+
+export const auditLogsRelations = relations(auditLogs, ({ one }) => ({
+  user: one(users, {
+    fields: [auditLogs.userId],
+    references: [users.id],
   }),
 }));
