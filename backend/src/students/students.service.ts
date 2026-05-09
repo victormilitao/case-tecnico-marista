@@ -4,32 +4,31 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { and, eq, ne, or } from 'drizzle-orm';
-import { Database, DRIZZLE } from '../database/database.module';
-import { students } from '../database/schema';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
+import {
+  STUDENTS_REPOSITORY,
+  StudentsRepository,
+} from './domain/students.repository';
 
 @Injectable()
 export class StudentsService {
-  constructor(@Inject(DRIZZLE) private readonly db: Database) {}
+  constructor(
+    @Inject(STUDENTS_REPOSITORY)
+    private readonly repo: StudentsRepository,
+  ) {}
 
   async create(dto: CreateStudentDto) {
     await this.assertUniqueness(dto.registration, dto.email);
-    const [created] = await this.db.insert(students).values(dto).returning();
-    return created;
+    return this.repo.create(dto);
   }
 
   findAll() {
-    return this.db.select().from(students).orderBy(students.name);
+    return this.repo.findAll();
   }
 
   async findOne(id: string) {
-    const [student] = await this.db
-      .select()
-      .from(students)
-      .where(eq(students.id, id))
-      .limit(1);
+    const student = await this.repo.findById(id);
     if (!student) throw new NotFoundException('Aluno não encontrado');
     return student;
   }
@@ -39,21 +38,15 @@ export class StudentsService {
     if (dto.registration || dto.email) {
       await this.assertUniqueness(dto.registration, dto.email, id);
     }
-    const [updated] = await this.db
-      .update(students)
-      .set({ ...dto, updatedAt: new Date() })
-      .where(eq(students.id, id))
-      .returning();
+    const updated = await this.repo.update(id, dto);
+    if (!updated) throw new NotFoundException('Aluno não encontrado');
     return updated;
   }
 
   async remove(id: string) {
-    const [removed] = await this.db
-      .delete(students)
-      .where(eq(students.id, id))
-      .returning({ id: students.id });
-    if (!removed) throw new NotFoundException('Aluno não encontrado');
-    return { id: removed.id };
+    const ok = await this.repo.delete(id);
+    if (!ok) throw new NotFoundException('Aluno não encontrado');
+    return { id };
   }
 
   private async assertUniqueness(
@@ -61,32 +54,17 @@ export class StudentsService {
     email?: string,
     excludeId?: string,
   ) {
-    const filters = [];
-    if (registration) filters.push(eq(students.registration, registration));
-    if (email) filters.push(eq(students.email, email));
-    if (filters.length === 0) return;
-
-    const where = excludeId
-      ? and(or(...filters), ne(students.id, excludeId))
-      : or(...filters);
-
-    const conflicts = await this.db
-      .select({
-        registration: students.registration,
-        email: students.email,
-      })
-      .from(students)
-      .where(where)
-      .limit(1);
-
-    if (conflicts.length > 0) {
-      const c = conflicts[0];
-      if (c.registration === registration) {
-        throw new ConflictException('Matrícula já cadastrada');
-      }
-      if (c.email === email) {
-        throw new ConflictException('E-mail já cadastrado');
-      }
+    const conflict = await this.repo.findRegistrationEmailConflict(
+      registration,
+      email,
+      excludeId,
+    );
+    if (!conflict) return;
+    if (conflict.registration === registration) {
+      throw new ConflictException('Matrícula já cadastrada');
+    }
+    if (conflict.email === email) {
+      throw new ConflictException('E-mail já cadastrado');
     }
   }
 }

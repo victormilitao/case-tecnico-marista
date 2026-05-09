@@ -1,6 +1,8 @@
 import request from 'supertest';
 import { StudentsController } from './students.controller';
 import { StudentsService } from './students.service';
+import { STUDENTS_REPOSITORY } from './domain/students.repository';
+import { StudentsDrizzleRepository } from './infra/students.drizzle.repository';
 import { createDbMock, DbMock } from '../../test/db-mock';
 import { asTestUser, AppHandle, createTestApp } from '../../test/setup-app';
 
@@ -14,7 +16,10 @@ describe('StudentsController (integration)', () => {
     db = createDbMock();
     handle = await createTestApp({
       controllers: [StudentsController],
-      providers: [StudentsService],
+      providers: [
+        StudentsService,
+        { provide: STUDENTS_REPOSITORY, useClass: StudentsDrizzleRepository },
+      ],
       db: db as never,
     });
   });
