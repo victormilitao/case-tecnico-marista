@@ -1,0 +1,22 @@
+{
+  "name": "marista-e2e",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "report": "playwright show-report",
+    "db:up": "docker compose --profile test -f ../docker-compose.yml up -d postgres-test",
+    "db:down": "docker compose --profile test -f ../docker-compose.yml down postgres-test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0",
+    "drizzle-orm": "^0.36.4",
+    "pg": "^8.13.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "@types/node": "^22.10.2",
+    "@types/pg": "^8.11.10"
+  }
+}
