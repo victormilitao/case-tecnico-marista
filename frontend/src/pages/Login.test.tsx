@@ -36,13 +36,13 @@ describe('LoginPage', () => {
     localStorage.clear();
   });
 
-  it('exibe formulário de login por padrão', async () => {
+  it('shows the login form by default', async () => {
     setup();
     expect(await screen.findByRole('heading', { name: 'Área administrativa' })).toBeInTheDocument();
     expect(screen.getByPlaceholderText('seu@email.com')).toBeInTheDocument();
   });
 
-  it('alterna para modo cadastro ao clicar em "Cadastre-se"', async () => {
+  it('switches to register mode when clicking "Cadastre-se"', async () => {
     setup();
     await userEvent.click(
       await screen.findByRole('button', { name: /Cadastre-se/i }),
@@ -51,7 +51,7 @@ describe('LoginPage', () => {
     expect(screen.getByPlaceholderText('Seu nome completo')).toBeInTheDocument();
   });
 
-  it('faz login com sucesso e navega para /dashboard', async () => {
+  it('logs in successfully and navigates to /dashboard', async () => {
     (authApi.login as never as ReturnType<typeof vi.fn>).mockResolvedValue({
       accessToken: 't',
       user: { id: 'u1', name: 'A', email: 'a@x.com', role: 'admin' },
@@ -66,7 +66,7 @@ describe('LoginPage', () => {
     await waitFor(() => expect(screen.getByText('dashboard')).toBeInTheDocument());
   });
 
-  it('exibe erro quando login falha', async () => {
+  it('shows error when login fails', async () => {
     const err = Object.assign(new Error('boom'), {
       isAxiosError: true,
       response: { data: { message: 'Credenciais inválidas' } },

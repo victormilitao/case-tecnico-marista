@@ -22,14 +22,14 @@ describe('RoomsController (integration)', () => {
 
   afterEach(() => handle.close());
 
-  it('GET /api/rooms exige role admin', async () => {
+  it('GET /api/rooms requires admin role', async () => {
     await request(handle.app.getHttpServer())
       .get('/api/rooms')
       .set('X-Test-User', studentHeader)
       .expect(403);
   });
 
-  it('GET /api/rooms lista para admin', async () => {
+  it('GET /api/rooms lists rooms for admin', async () => {
     db.queueResult([{ id: 'r1', name: 'Lab' }]);
     const res = await request(handle.app.getHttpServer())
       .get('/api/rooms')
@@ -38,15 +38,15 @@ describe('RoomsController (integration)', () => {
     expect(res.body).toHaveLength(1);
   });
 
-  it('POST /api/rooms valida tipo do payload', async () => {
+  it('POST /api/rooms validates payload type', async () => {
     await request(handle.app.getHttpServer())
       .post('/api/rooms')
       .set('X-Test-User', adminHeader)
-      .send({ name: 'Lab', type: 'tipo-invalido', capacity: 10 })
+      .send({ name: 'Lab', type: 'invalid-type', capacity: 10 })
       .expect(400);
   });
 
-  it('POST /api/rooms cria sala', async () => {
+  it('POST /api/rooms creates a room', async () => {
     const created = { id: 'r1', name: 'Lab', type: 'laboratory', capacity: 10 };
     db.queueResult([created]);
     const res = await request(handle.app.getHttpServer())
@@ -57,7 +57,7 @@ describe('RoomsController (integration)', () => {
     expect(res.body).toMatchObject(created);
   });
 
-  it('GET /api/rooms/:id/occupancy retorna métricas', async () => {
+  it('GET /api/rooms/:id/occupancy returns metrics', async () => {
     db.queueResult([{ id: 'r1', name: 'Lab', capacity: 5 }]);
     db.queueResult([
       { attendanceId: 'a1', checkInAt: new Date().toISOString(), student: { id: 's1', name: 'Ana', registration: '1' } },

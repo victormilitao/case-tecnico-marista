@@ -11,7 +11,7 @@ describe('RoomsService', () => {
     service = new RoomsService(db as never);
   });
 
-  it('create insere e retorna o ambiente', async () => {
+  it('creates and returns the room', async () => {
     const room = { id: 'r1', name: 'Lab 1', type: 'laboratory', capacity: 10 };
     db.queueResult([room]);
 
@@ -24,42 +24,42 @@ describe('RoomsService', () => {
     expect(db.insert).toHaveBeenCalledTimes(1);
   });
 
-  it('findOne retorna o ambiente', async () => {
+  it('findOne returns the room', async () => {
     const room = { id: 'r1', name: 'Lab 1' };
     db.queueResult([room]);
     await expect(service.findOne('r1')).resolves.toEqual(room);
   });
 
-  it('findOne lança NotFound quando inexistente', async () => {
+  it('findOne throws NotFound when missing', async () => {
     db.queueResult([]);
     await expect(service.findOne('r1')).rejects.toThrow(NotFoundException);
   });
 
-  it('update modifica e retorna o ambiente', async () => {
-    db.queueResult([{ id: 'r1' }]); // findOne
-    const updated = { id: 'r1', name: 'Lab 1 - Renomeada', capacity: 20 };
+  it('updates and returns the room', async () => {
+    db.queueResult([{ id: 'r1' }]);
+    const updated = { id: 'r1', name: 'Lab 1 - Renamed', capacity: 20 };
     db.queueResult([updated]);
 
     const result = await service.update('r1', {
-      name: 'Lab 1 - Renomeada',
+      name: 'Lab 1 - Renamed',
       capacity: 20,
     });
     expect(result).toEqual(updated);
   });
 
-  it('update falha quando ambiente não existe', async () => {
+  it('update throws NotFound when room does not exist', async () => {
     db.queueResult([]);
     await expect(service.update('r1', { name: 'X' })).rejects.toThrow(
       NotFoundException,
     );
   });
 
-  it('remove deleta e retorna o id', async () => {
+  it('removes and returns the id', async () => {
     db.queueResult([{ id: 'r1' }]);
     await expect(service.remove('r1')).resolves.toEqual({ id: 'r1' });
   });
 
-  it('remove lança NotFound quando inexistente', async () => {
+  it('remove throws NotFound when missing', async () => {
     db.queueResult([]);
     await expect(service.remove('r1')).rejects.toThrow(NotFoundException);
   });

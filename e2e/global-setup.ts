@@ -1,8 +1,8 @@
 /**
- * Roda uma vez antes de toda a suíte: garante que o banco de teste está acessível
- * e aplica as migrations do drizzle.
+ * Runs once before the whole suite: ensures the test database is reachable
+ * and applies the drizzle migrations.
  *
- * Pré-requisito: o serviço `postgres-test` do docker-compose precisa estar de pé.
+ * Prerequisite: the `postgres-test` service from docker-compose must be up.
  *   docker compose --profile test up -d postgres-test
  */
 import { drizzle } from 'drizzle-orm/node-postgres';
@@ -13,10 +13,10 @@ import { TEST_DATABASE_URL } from './support/env';
 import { waitForPostgres } from './support/db';
 
 export default async function globalSetup() {
-  console.log('[e2e] aguardando Postgres de teste...');
+  console.log('[e2e] waiting for test Postgres...');
   await waitForPostgres();
 
-  console.log('[e2e] aplicando migrations...');
+  console.log('[e2e] applying migrations...');
   const pool = new Pool({ connectionString: TEST_DATABASE_URL });
   const db = drizzle(pool);
   const migrationsFolder = path.resolve(
@@ -26,5 +26,5 @@ export default async function globalSetup() {
   await migrate(db, { migrationsFolder });
   await pool.end();
 
-  console.log('[e2e] DB pronto.');
+  console.log('[e2e] DB ready.');
 }

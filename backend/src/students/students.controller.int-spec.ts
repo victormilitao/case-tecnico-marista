@@ -21,18 +21,18 @@ describe('StudentsController (integration)', () => {
 
   afterEach(() => handle.close());
 
-  it('retorna 401 sem token', async () => {
+  it('returns 401 without a token', async () => {
     await request(handle.app.getHttpServer()).get('/api/students').expect(401);
   });
 
-  it('retorna 403 para usuário aluno (apenas admin)', async () => {
+  it('returns 403 for student users (admin only)', async () => {
     await request(handle.app.getHttpServer())
       .get('/api/students')
       .set('X-Test-User', studentHeader)
       .expect(403);
   });
 
-  it('GET /api/students lista alunos para admin', async () => {
+  it('GET /api/students lists students for admin', async () => {
     db.queueResult([
       { id: 's1', name: 'Ana' },
       { id: 's2', name: 'Bia' },
@@ -44,7 +44,7 @@ describe('StudentsController (integration)', () => {
     expect(res.body).toHaveLength(2);
   });
 
-  it('POST /api/students valida payload (campos obrigatórios)', async () => {
+  it('POST /api/students validates required fields', async () => {
     await request(handle.app.getHttpServer())
       .post('/api/students')
       .set('X-Test-User', adminHeader)
@@ -52,7 +52,7 @@ describe('StudentsController (integration)', () => {
       .expect(400);
   });
 
-  it('POST /api/students rejeita campos extras (forbidNonWhitelisted)', async () => {
+  it('POST /api/students rejects extra fields (forbidNonWhitelisted)', async () => {
     await request(handle.app.getHttpServer())
       .post('/api/students')
       .set('X-Test-User', adminHeader)
@@ -65,8 +65,8 @@ describe('StudentsController (integration)', () => {
       .expect(400);
   });
 
-  it('POST /api/students cria aluno', async () => {
-    db.queueResult([]); // assertUniqueness
+  it('POST /api/students creates a student', async () => {
+    db.queueResult([]);
     const created = { id: 's1', registration: '123', name: 'Ana', email: 'a@x.com' };
     db.queueResult([created]);
 
@@ -78,7 +78,7 @@ describe('StudentsController (integration)', () => {
     expect(res.body).toMatchObject(created);
   });
 
-  it('POST /api/students retorna 409 quando matrícula já existe', async () => {
+  it('POST /api/students returns 409 when registration already exists', async () => {
     db.queueResult([{ registration: '123', email: 'outra@x.com' }]);
     await request(handle.app.getHttpServer())
       .post('/api/students')
@@ -87,14 +87,14 @@ describe('StudentsController (integration)', () => {
       .expect(409);
   });
 
-  it('GET /api/students/:id valida UUID', async () => {
+  it('GET /api/students/:id validates UUID format', async () => {
     await request(handle.app.getHttpServer())
-      .get('/api/students/nao-eh-uuid')
+      .get('/api/students/not-a-uuid')
       .set('X-Test-User', adminHeader)
       .expect(400);
   });
 
-  it('GET /api/students/:id retorna 404 quando inexistente', async () => {
+  it('GET /api/students/:id returns 404 when not found', async () => {
     db.queueResult([]);
     await request(handle.app.getHttpServer())
       .get('/api/students/00000000-0000-0000-0000-000000000000')
@@ -102,7 +102,7 @@ describe('StudentsController (integration)', () => {
       .expect(404);
   });
 
-  it('DELETE /api/students/:id remove e retorna id', async () => {
+  it('DELETE /api/students/:id removes and returns id', async () => {
     db.queueResult([{ id: '00000000-0000-0000-0000-000000000001' }]);
     const res = await request(handle.app.getHttpServer())
       .delete('/api/students/00000000-0000-0000-0000-000000000001')

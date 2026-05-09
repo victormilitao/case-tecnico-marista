@@ -1,8 +1,8 @@
 /**
- * Helper para mockar o Drizzle ORM em testes unitários.
+ * Drizzle ORM mock for unit tests.
  *
- * Cada chamada de select/insert/update/delete retorna um "chain" thenable.
- * Ao ser awaited, consome o próximo valor da fila (queueResult).
+ * Each call to select/insert/update/delete returns a thenable chain.
+ * When awaited, the chain consumes the next value pushed via queueResult.
  */
 export interface DbMock {
   select: jest.Mock;
@@ -22,7 +22,7 @@ export function createDbMock(): DbMock {
         if (prop === 'then') {
           if (queue.length === 0) {
             throw new Error(
-              'createDbMock: nenhum resultado enfileirado para esta chamada',
+              'createDbMock: no result queued for this call',
             );
           }
           const result = queue.shift();

@@ -42,7 +42,7 @@ describe('DashboardPage', () => {
     vi.useRealTimers();
   });
 
-  it('mostra "Nenhum ambiente cadastrado" quando não há salas', async () => {
+  it('shows "Nenhum ambiente cadastrado" when there are no rooms', async () => {
     mocked(roomsApi.list).mockResolvedValue([]);
     render(<DashboardPage />);
     expect(
@@ -50,12 +50,12 @@ describe('DashboardPage', () => {
     ).toBeInTheDocument();
   });
 
-  it('renderiza cards com totais e taxa geral', async () => {
+  it('renders cards with totals and overall rate', async () => {
     mocked(roomsApi.list).mockResolvedValue([
       room('r1', 'Lab A', 10),
       room('r2', 'Sala 1', 20),
     ]);
-    // o componente exibe `d.room.name` retornado pela ocupação
+    // Component reads d.room.name from the occupancy payload, not from the list
     const o1 = occ('r1', 5, 10);
     o1.room = room('r1', 'Lab A', 10);
     const o2 = occ('r2', 10, 20);
@@ -67,12 +67,11 @@ describe('DashboardPage', () => {
     render(<DashboardPage />);
     expect(await screen.findByText('Lab A')).toBeInTheDocument();
     expect(screen.getByText('Sala 1')).toBeInTheDocument();
-    // total: 15/30 = 50%
     expect(screen.getByText('15/30')).toBeInTheDocument();
     expect(screen.getByText(/50%/)).toBeInTheDocument();
   });
 
-  it('mostra "+N outros..." quando há mais de 5 ocupantes', async () => {
+  it('shows "+N outros..." when more than 5 occupants', async () => {
     mocked(roomsApi.list).mockResolvedValue([room('r1', 'Lab A', 20)]);
     const o = occ('r1', 8, 20, { manyOccupants: true });
     o.room = room('r1', 'Lab A', 20);
@@ -81,7 +80,7 @@ describe('DashboardPage', () => {
     expect(await screen.findByText(/\+3 outros\.\.\./)).toBeInTheDocument();
   });
 
-  it('agenda polling de 15s com setInterval', async () => {
+  it('schedules 15s polling with setInterval', async () => {
     const setIntervalSpy = vi.spyOn(window, 'setInterval');
     mocked(roomsApi.list).mockResolvedValue([]);
     render(<DashboardPage />);

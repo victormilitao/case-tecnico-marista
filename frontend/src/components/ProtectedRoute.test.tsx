@@ -33,21 +33,21 @@ describe('ProtectedRoute', () => {
     localStorage.clear();
   });
 
-  it('redireciona para /login quando não autenticado e não exige role student', async () => {
+  it('redirects to /login when not authenticated and student role not required', async () => {
     renderAt('/dashboard');
     await waitFor(() =>
       expect(screen.getByText('login-admin')).toBeInTheDocument(),
     );
   });
 
-  it('redireciona para /aluno/login quando rota requer role=student', async () => {
+  it('redirects to /aluno/login when route requires student role', async () => {
     renderAt('/aluno', 'student');
     await waitFor(() =>
       expect(screen.getByText('login-aluno')).toBeInTheDocument(),
     );
   });
 
-  it('libera acesso quando role do usuário bate com a exigência', async () => {
+  it('allows access when user role matches the requirement', async () => {
     localStorage.setItem(TOKEN_KEY, 't');
     (authApi.me as never as ReturnType<typeof vi.fn>).mockResolvedValue({
       id: 'u1',
@@ -61,7 +61,7 @@ describe('ProtectedRoute', () => {
     );
   });
 
-  it('redireciona admin para /dashboard ao tentar entrar em rota de aluno', async () => {
+  it('redirects admin to /dashboard when entering a student route', async () => {
     localStorage.setItem(TOKEN_KEY, 't');
     (authApi.me as never as ReturnType<typeof vi.fn>).mockResolvedValue({
       id: 'u1',

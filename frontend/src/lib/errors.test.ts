@@ -21,28 +21,28 @@ function makeAxiosError(data: unknown) {
 }
 
 describe('getApiErrorMessage', () => {
-  it('extrai message string do payload Axios', () => {
+  it('extracts string message from Axios payload', () => {
     const err = makeAxiosError({ message: 'E-mail já cadastrado' });
     expect(getApiErrorMessage(err)).toBe('E-mail já cadastrado');
   });
 
-  it('junta array de mensagens (validation pipe)', () => {
+  it('joins array of messages (validation pipe)', () => {
     const err = makeAxiosError({
       message: ['email must be valid', 'password too short'],
     });
     expect(getApiErrorMessage(err)).toBe('email must be valid, password too short');
   });
 
-  it('cai no err.message quando payload não tem message', () => {
+  it('falls back to err.message when payload has no message', () => {
     const err = makeAxiosError({});
     expect(getApiErrorMessage(err)).toBe('Request failed');
   });
 
-  it('extrai message de Error padrão', () => {
+  it('extracts message from plain Error', () => {
     expect(getApiErrorMessage(new Error('boom'))).toBe('boom');
   });
 
-  it('usa fallback para tipos desconhecidos', () => {
-    expect(getApiErrorMessage('coisa estranha', 'fallback!')).toBe('fallback!');
+  it('uses fallback for unknown types', () => {
+    expect(getApiErrorMessage('weird thing', 'fallback!')).toBe('fallback!');
   });
 });

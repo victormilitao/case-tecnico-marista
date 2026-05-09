@@ -31,7 +31,7 @@ describe('HomePage', () => {
     localStorage.clear();
   });
 
-  it('mostra os dois CTAs quando não autenticado', async () => {
+  it('shows both CTAs when not authenticated', async () => {
     setup();
     expect(
       await screen.findByRole('heading', { name: /Controle de Espaços/i }),
@@ -40,7 +40,7 @@ describe('HomePage', () => {
     expect(screen.getByRole('link', { name: /Área do aluno/i })).toHaveAttribute('href', '/aluno/login');
   });
 
-  it('redireciona admin autenticado para /dashboard', async () => {
+  it('redirects authenticated admin to /dashboard', async () => {
     localStorage.setItem(TOKEN_KEY, 't');
     (authApi.me as never as ReturnType<typeof vi.fn>).mockResolvedValue({
       id: 'u1',
@@ -52,7 +52,7 @@ describe('HomePage', () => {
     await waitFor(() => expect(screen.getByText('area-admin')).toBeInTheDocument());
   });
 
-  it('redireciona aluno autenticado para /aluno', async () => {
+  it('redirects authenticated student to /aluno', async () => {
     localStorage.setItem(TOKEN_KEY, 't');
     (authApi.me as never as ReturnType<typeof vi.fn>).mockResolvedValue({
       id: 's1',

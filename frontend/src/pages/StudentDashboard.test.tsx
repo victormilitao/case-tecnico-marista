@@ -51,7 +51,7 @@ describe('StudentDashboardPage', () => {
     mocked(meApi.attendance).mockResolvedValue([]);
   });
 
-  it('mostra formulário de check-in quando aluno não tem check-in aberto', async () => {
+  it('shows check-in form when student has no open check-in', async () => {
     mocked(meApi.status).mockResolvedValue({ activeCheckIn: null });
     setup();
     expect(await screen.findByText(/Olá, Ana!/)).toBeInTheDocument();
@@ -59,7 +59,7 @@ describe('StudentDashboardPage', () => {
     expect(screen.getByRole('button', { name: /Registrar entrada/i })).toBeDisabled();
   });
 
-  it('habilita check-in após escolher ambiente e envia roomId', async () => {
+  it('enables check-in after picking a room and sends the roomId', async () => {
     mocked(meApi.status)
       .mockResolvedValueOnce({ activeCheckIn: null })
       .mockResolvedValueOnce({
@@ -81,7 +81,7 @@ describe('StudentDashboardPage', () => {
     expect(await screen.findByText(/Entrada registrada/i)).toBeInTheDocument();
   });
 
-  it('mostra info do check-in ativo e permite checkout', async () => {
+  it('shows active check-in info and allows check-out', async () => {
     mocked(meApi.status)
       .mockResolvedValueOnce({
         activeCheckIn: {
@@ -100,7 +100,7 @@ describe('StudentDashboardPage', () => {
     expect(await screen.findByText(/Saída registrada/i)).toBeInTheDocument();
   });
 
-  it('exibe erro quando check-in falha', async () => {
+  it('shows error when check-in fails', async () => {
     mocked(meApi.status).mockResolvedValue({ activeCheckIn: null });
     mocked(meApi.checkIn).mockRejectedValue(
       Object.assign(new Error('boom'), {
@@ -117,7 +117,7 @@ describe('StudentDashboardPage', () => {
     expect(await screen.findByText('Capacidade esgotada')).toBeInTheDocument();
   });
 
-  it('mostra "Você ainda não tem registros" quando histórico vazio', async () => {
+  it('shows "Você ainda não tem registros" when history is empty', async () => {
     mocked(meApi.status).mockResolvedValue({ activeCheckIn: null });
     setup();
     expect(

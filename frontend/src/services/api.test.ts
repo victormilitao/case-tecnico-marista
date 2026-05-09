@@ -1,7 +1,3 @@
-/**
- * Testes do interceptor do axios.
- * Não executamos requisições reais; usamos os interceptors diretamente.
- */
 import { describe, expect, it, beforeEach, vi } from 'vitest';
 import { AxiosError, AxiosHeaders, InternalAxiosRequestConfig } from 'axios';
 import { api, TOKEN_KEY } from './api';
@@ -30,7 +26,7 @@ function makeError(status: number, url: string): AxiosError {
 }
 
 function getRequestInterceptor() {
-  // @ts-expect-error acesso interno só para teste
+  // @ts-expect-error reaching into private handlers for tests
   const handlers = api.interceptors.request.handlers as Array<{
     fulfilled: (cfg: InternalAxiosRequestConfig) => InternalAxiosRequestConfig;
   }>;
@@ -38,7 +34,7 @@ function getRequestInterceptor() {
 }
 
 function getResponseRejected() {
-  // @ts-expect-error acesso interno só para teste
+  // @ts-expect-error reaching into private handlers for tests
   const handlers = api.interceptors.response.handlers as Array<{
     rejected: (err: AxiosError) => unknown;
   }>;
@@ -48,13 +44,13 @@ function getResponseRejected() {
 describe('api request interceptor', () => {
   beforeEach(() => localStorage.clear());
 
-  it('adiciona Bearer token quando há token no storage', () => {
+  it('adds Bearer token when storage has one', () => {
     localStorage.setItem(TOKEN_KEY, 'abc');
     const cfg = getRequestInterceptor()(makeRequestConfig());
     expect(cfg.headers.Authorization).toBe('Bearer abc');
   });
 
-  it('não define Authorization quando não há token', () => {
+  it('does not set Authorization when there is no token', () => {
     const cfg = getRequestInterceptor()(makeRequestConfig());
     expect(cfg.headers.Authorization).toBeUndefined();
   });
@@ -69,7 +65,7 @@ describe('api response interceptor (401)', () => {
     });
   });
 
-  it('limpa token e redireciona admin para /login', async () => {
+  it('clears token and redirects admin to /login', async () => {
     await expect(
       getResponseRejected()(makeError(401, '/api/students')),
     ).rejects.toBeDefined();
@@ -77,7 +73,7 @@ describe('api response interceptor (401)', () => {
     expect(window.location.href).toBe('/login');
   });
 
-  it('redireciona aluno para /aluno/login', async () => {
+  it('redirects student to /aluno/login', async () => {
     Object.defineProperty(window, 'location', {
       value: { pathname: '/aluno/dashboard', href: '/aluno/dashboard' },
       writable: true,
@@ -88,14 +84,14 @@ describe('api response interceptor (401)', () => {
     expect(window.location.href).toBe('/aluno/login');
   });
 
-  it('NÃO desloga quando 401 vem de tentativa de login (deixa o caller tratar)', async () => {
+  it('does NOT log out when 401 comes from a login attempt (caller handles it)', async () => {
     await expect(
       getResponseRejected()(makeError(401, '/api/auth/login')),
     ).rejects.toBeDefined();
     expect(localStorage.getItem(TOKEN_KEY)).toBe('abc');
   });
 
-  it('rejeita normalmente erros não-401', async () => {
+  it('rejects non-401 errors normally', async () => {
     await expect(
       getResponseRejected()(makeError(500, '/api/students')),
     ).rejects.toBeDefined();
@@ -103,11 +99,10 @@ describe('api response interceptor (401)', () => {
   });
 });
 
-describe('exporta TOKEN_KEY constante', () => {
-  it('valor estável', () => {
+describe('TOKEN_KEY', () => {
+  it('exports stable value', () => {
     expect(TOKEN_KEY).toBe('marista.token');
   });
 });
 
-// silenciar warning de async
 void vi.fn;

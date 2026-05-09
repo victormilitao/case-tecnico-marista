@@ -25,8 +25,8 @@ describe('AuthController (integration)', () => {
 
   afterEach(() => handle.close());
 
-  describe('rotas públicas', () => {
-    it('POST /api/auth/login retorna token quando credenciais corretas', async () => {
+  describe('public routes', () => {
+    it('POST /api/auth/login returns token when credentials are correct', async () => {
       db.queueResult([
         { id: 'u1', name: 'Admin', email: 'a@x.com', passwordHash: 'h' },
       ]);
@@ -40,7 +40,7 @@ describe('AuthController (integration)', () => {
       expect(res.body.user).toMatchObject({ role: 'admin' });
     });
 
-    it('POST /api/auth/login retorna 401 com credenciais inválidas', async () => {
+    it('POST /api/auth/login returns 401 with invalid credentials', async () => {
       db.queueResult([]);
       await request(handle.app.getHttpServer())
         .post('/api/auth/login')
@@ -48,15 +48,15 @@ describe('AuthController (integration)', () => {
         .expect(401);
     });
 
-    it('POST /api/auth/login valida payload', async () => {
+    it('POST /api/auth/login validates payload', async () => {
       await request(handle.app.getHttpServer())
         .post('/api/auth/login')
-        .send({ email: 'nao-eh-email' })
+        .send({ email: 'not-an-email' })
         .expect(400);
     });
 
-    it('POST /api/auth/register retorna 201 e cria admin', async () => {
-      db.queueResult([]); // existing
+    it('POST /api/auth/register returns 201 and creates admin', async () => {
+      db.queueResult([]);
       bcryptMock.hash.mockResolvedValue('h' as never);
       db.queueResult([{ id: 'u1', name: 'Admin', email: 'a@x.com' }]);
 
@@ -67,15 +67,15 @@ describe('AuthController (integration)', () => {
       expect(res.body.accessToken).toBeDefined();
     });
 
-    it('POST /api/auth/register retorna 409 quando email já existe', async () => {
-      db.queueResult([{ id: 'u-existente' }]);
+    it('POST /api/auth/register returns 409 when email already exists', async () => {
+      db.queueResult([{ id: 'u-existing' }]);
       await request(handle.app.getHttpServer())
         .post('/api/auth/register')
         .send({ name: 'Admin', email: 'a@x.com', password: 'pwd12345' })
         .expect(409);
     });
 
-    it('POST /api/auth/student/login indica que precisa criar senha', async () => {
+    it('POST /api/auth/student/login signals that password setup is required', async () => {
       db.queueResult([
         { id: 's1', registration: '123', passwordHash: null },
       ]);
@@ -87,14 +87,14 @@ describe('AuthController (integration)', () => {
     });
   });
 
-  describe('GET /api/auth/me (protegida)', () => {
-    it('retorna 401 sem token', async () => {
+  describe('GET /api/auth/me (protected)', () => {
+    it('returns 401 without a token', async () => {
       await request(handle.app.getHttpServer())
         .get('/api/auth/me')
         .expect(401);
     });
 
-    it('retorna dados do admin autenticado', async () => {
+    it('returns admin profile for authenticated admin', async () => {
       db.queueResult([{ id: 'u1', name: 'Admin', email: 'a@x.com' }]);
       const res = await request(handle.app.getHttpServer())
         .get('/api/auth/me')
@@ -103,7 +103,7 @@ describe('AuthController (integration)', () => {
       expect(res.body).toMatchObject({ id: 'u1', role: 'admin' });
     });
 
-    it('retorna dados do aluno autenticado', async () => {
+    it('returns student profile for authenticated student', async () => {
       db.queueResult([
         { id: 's1', name: 'Ana', email: 'a@x.com', registration: '123' },
       ]);

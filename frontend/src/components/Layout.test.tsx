@@ -35,21 +35,20 @@ describe('Layout', () => {
     });
   });
 
-  it('renderiza nav com itens e área de conteúdo via Outlet', async () => {
+  it('renders nav items and the routed content', async () => {
     setup();
     expect(await screen.findByText('conteudo-dashboard')).toBeInTheDocument();
-    // navItems aparecem em desktop + mobile, então usamos getAllByRole
     const dashboardLinks = screen.getAllByRole('link', { name: 'Dashboard' });
     expect(dashboardLinks.length).toBeGreaterThan(0);
     expect(dashboardLinks[0]).toHaveAttribute('href', '/dashboard');
   });
 
-  it('exibe nome do usuário autenticado', async () => {
+  it('shows authenticated user name', async () => {
     setup();
     expect((await screen.findAllByText('Admin User')).length).toBeGreaterThan(0);
   });
 
-  it('logout limpa token', async () => {
+  it('logout clears the token', async () => {
     setup();
     await screen.findByText('conteudo-dashboard');
     const logoutButtons = screen.getAllByRole('button', { name: /Sair/i });
@@ -57,7 +56,7 @@ describe('Layout', () => {
     await waitFor(() => expect(localStorage.getItem(TOKEN_KEY)).toBeNull());
   });
 
-  it('botão de menu mobile alterna aria-expanded', async () => {
+  it('mobile menu button toggles aria-expanded', async () => {
     setup();
     await screen.findByText('conteudo-dashboard');
     const toggle = screen.getByRole('button', { name: 'Abrir menu' });

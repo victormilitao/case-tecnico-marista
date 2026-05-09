@@ -37,7 +37,7 @@ describe('StudentLoginPage (state machine)', () => {
     localStorage.clear();
   });
 
-  it('passo identify -> login quando aluno já tem senha', async () => {
+  it('goes from identify to login step when student already has password', async () => {
     mocked(authApi.studentLogin).mockResolvedValueOnce({ requiresPassword: true });
     setup();
     await userEvent.type(
@@ -50,7 +50,7 @@ describe('StudentLoginPage (state machine)', () => {
     ).toBeInTheDocument();
   });
 
-  it('passo identify -> set-password quando aluno é primeiro acesso', async () => {
+  it('goes from identify to set-password step on first access', async () => {
     mocked(authApi.studentLogin).mockResolvedValueOnce({ requiresPasswordSetup: true });
     setup();
     await userEvent.type(
@@ -63,7 +63,7 @@ describe('StudentLoginPage (state machine)', () => {
     ).toBeInTheDocument();
   });
 
-  it('valida confirmação de senha no passo set-password', async () => {
+  it('validates password confirmation on set-password step', async () => {
     mocked(authApi.studentLogin).mockResolvedValueOnce({ requiresPasswordSetup: true });
     setup();
     await userEvent.type(
@@ -81,7 +81,7 @@ describe('StudentLoginPage (state machine)', () => {
     expect(authApi.studentSetPassword).not.toHaveBeenCalled();
   });
 
-  it('login bem-sucedido aplica sessão e navega para /aluno', async () => {
+  it('successful login applies session and navigates to /aluno', async () => {
     mocked(authApi.studentLogin)
       .mockResolvedValueOnce({ requiresPassword: true })
       .mockResolvedValueOnce({
@@ -104,7 +104,7 @@ describe('StudentLoginPage (state machine)', () => {
     );
   });
 
-  it('botão "Trocar matrícula" volta para o passo identify', async () => {
+  it('"Trocar matrícula" button returns to the identify step', async () => {
     mocked(authApi.studentLogin).mockResolvedValueOnce({ requiresPassword: true });
     setup();
     await userEvent.type(

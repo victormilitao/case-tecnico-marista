@@ -1,9 +1,9 @@
 /**
- * Helpers para criar dados de suporte via API (admin, sala, aluno).
- * Os fluxos de autenticação e check-in/check-out são exercitados via UI nos specs;
- * estes helpers existem só para o setup quando precisamos de pré-condições rápidas.
+ * API helpers for seeding support data (admin, room, student).
+ * Authentication and check-in/check-out flows are exercised through the UI
+ * in the specs; these helpers exist only to set up preconditions quickly.
  */
-import { request, APIRequestContext } from '@playwright/test';
+import { request } from '@playwright/test';
 import { TEST_API_BASE } from './env';
 
 export interface AdminFixture {
@@ -27,7 +27,7 @@ export async function createAdminViaApi(opts?: {
     data: { name, email, password },
   });
   if (!res.ok()) {
-    throw new Error(`Falha ao registrar admin: ${res.status()} ${await res.text()}`);
+    throw new Error(`Failed to register admin: ${res.status()} ${await res.text()}`);
   }
   const body = (await res.json()) as { accessToken: string };
   await ctx.dispose();
@@ -44,7 +44,7 @@ export async function createRoomViaApi(
   });
   const res = await ctx.post('rooms', { data });
   if (!res.ok()) {
-    throw new Error(`Falha ao criar sala: ${res.status()} ${await res.text()}`);
+    throw new Error(`Failed to create room: ${res.status()} ${await res.text()}`);
   }
   const room = await res.json();
   await ctx.dispose();
@@ -61,31 +61,9 @@ export async function createStudentViaApi(
   });
   const res = await ctx.post('students', { data });
   if (!res.ok()) {
-    throw new Error(`Falha ao criar aluno: ${res.status()} ${await res.text()}`);
+    throw new Error(`Failed to create student: ${res.status()} ${await res.text()}`);
   }
   const student = await res.json();
   await ctx.dispose();
   return student;
-}
-
-/**
- * Espera o backend ficar saudável (responde a /api/auth/login).
- * Útil em casos de race entre webServer e os specs.
- */
-export async function waitForBackend(
-  ctx: APIRequestContext,
-  timeoutMs = 30_000,
-): Promise<void> {
-  const start = Date.now();
-  while (Date.now() - start < timeoutMs) {
-    try {
-      const res = await ctx.post('/auth/login', { data: { email: 'x@x.com', password: 'x' } });
-      // backend responde 400 (validation) ou 401 — qualquer < 500 serve
-      if (res.status() < 500) return;
-    } catch {
-      /* ignore */
-    }
-    await new Promise((r) => setTimeout(r, 500));
-  }
-  throw new Error('Backend não respondeu a tempo');
 }

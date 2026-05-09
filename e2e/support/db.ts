@@ -17,10 +17,6 @@ export async function closePool(): Promise<void> {
   }
 }
 
-/**
- * Aguarda o Postgres aceitar conexões.
- * Útil quando o container acabou de subir.
- */
 export async function waitForPostgres(timeoutMs = 30_000): Promise<void> {
   const start = Date.now();
   let lastErr: unknown;
@@ -35,13 +31,9 @@ export async function waitForPostgres(timeoutMs = 30_000): Promise<void> {
       await new Promise((r) => setTimeout(r, 500));
     }
   }
-  throw new Error(`Postgres não respondeu em ${timeoutMs}ms: ${String(lastErr)}`);
+  throw new Error(`Postgres did not respond within ${timeoutMs}ms: ${String(lastErr)}`);
 }
 
-/**
- * Limpa todas as tabelas em ordem (respeitando FK).
- * Chamar em beforeEach.
- */
 export async function resetDatabase(): Promise<void> {
   await getPool().query(
     'TRUNCATE TABLE attendances, students, rooms, users RESTART IDENTITY CASCADE',

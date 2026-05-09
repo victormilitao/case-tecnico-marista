@@ -4,24 +4,24 @@ import userEvent from '@testing-library/user-event';
 import { Button } from './Button';
 
 describe('Button', () => {
-  it('renderiza children e dispara onClick', async () => {
+  it('renders children and dispatches onClick', async () => {
     const onClick = vi.fn();
     render(<Button onClick={onClick}>Salvar</Button>);
     await userEvent.click(screen.getByRole('button', { name: 'Salvar' }));
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
-  it('aplica classes da variant primary por padrão', () => {
+  it('applies primary variant classes by default', () => {
     render(<Button>Ok</Button>);
     expect(screen.getByRole('button')).toHaveClass('bg-marista-navy');
   });
 
-  it('aplica classes da variant danger', () => {
+  it('applies danger variant classes', () => {
     render(<Button variant="danger">Apagar</Button>);
     expect(screen.getByRole('button')).toHaveClass('bg-rose-600');
   });
 
-  it('respeita disabled', async () => {
+  it('respects disabled state', async () => {
     const onClick = vi.fn();
     render(
       <Button disabled onClick={onClick}>

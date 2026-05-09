@@ -1,9 +1,9 @@
 /**
- * Helpers para montar uma instância do Nest em testes de integração.
+ * Helpers to bootstrap a Nest instance for integration tests.
  *
- * - Mocka o provider DRIZZLE
- * - Substitui o JwtAuthGuard por um guard de teste que injeta req.user a partir do header X-Test-User
- * - Mantém RolesGuard, ValidationPipe e Reflector reais
+ * - Mocks the DRIZZLE provider
+ * - Replaces JwtAuthGuard with a test guard that injects req.user from the X-Test-User header
+ * - Keeps RolesGuard, ValidationPipe and Reflector real
  */
 import {
   CanActivate,

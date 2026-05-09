@@ -26,11 +26,11 @@ describe('AuthService', () => {
   });
 
   describe('register', () => {
-    it('cria usuário admin e retorna token', async () => {
-      db.queueResult([]); // existing check
+    it('creates an admin user and returns a token', async () => {
+      db.queueResult([]);
       bcryptMock.hash.mockResolvedValue('hashed' as never);
       const created = { id: 'u1', name: 'Admin', email: 'a@x.com' };
-      db.queueResult([created]); // insert.returning
+      db.queueResult([created]);
 
       const result = await service.register({
         name: 'Admin',
@@ -43,8 +43,8 @@ describe('AuthService', () => {
       expect(bcryptMock.hash).toHaveBeenCalledWith('pwd12345', 10);
     });
 
-    it('falha com ConflictException quando email já existe', async () => {
-      db.queueResult([{ id: 'u-existente' }]);
+    it('throws ConflictException when email already exists', async () => {
+      db.queueResult([{ id: 'u-existing' }]);
       await expect(
         service.register({ name: 'A', email: 'a@x.com', password: 'pwd12345' }),
       ).rejects.toThrow(ConflictException);
@@ -52,7 +52,7 @@ describe('AuthService', () => {
   });
 
   describe('login', () => {
-    it('autentica e retorna token quando senha confere', async () => {
+    it('authenticates and returns a token when password matches', async () => {
       db.queueResult([
         { id: 'u1', name: 'Admin', email: 'a@x.com', passwordHash: 'h' },
       ]);
@@ -63,14 +63,14 @@ describe('AuthService', () => {
       expect(result.user.role).toBe('admin');
     });
 
-    it('falha quando usuário não existe', async () => {
+    it('throws UnauthorizedException when user does not exist', async () => {
       db.queueResult([]);
       await expect(
         service.login({ email: 'a@x.com', password: 'p' }),
       ).rejects.toThrow(UnauthorizedException);
     });
 
-    it('falha quando senha não confere', async () => {
+    it('throws UnauthorizedException when password does not match', async () => {
       db.queueResult([
         { id: 'u1', name: 'Admin', email: 'a@x.com', passwordHash: 'h' },
       ]);
@@ -82,7 +82,7 @@ describe('AuthService', () => {
   });
 
   describe('studentLogin', () => {
-    it('retorna requiresPasswordSetup quando aluno não tem senha', async () => {
+    it('returns requiresPasswordSetup when student has no password yet', async () => {
       db.queueResult([
         { id: 's1', registration: '123', passwordHash: null },
       ]);
@@ -90,7 +90,7 @@ describe('AuthService', () => {
       expect(result).toEqual({ requiresPasswordSetup: true });
     });
 
-    it('retorna requiresPassword quando senha não foi enviada', async () => {
+    it('returns requiresPassword when password was not provided', async () => {
       db.queueResult([
         { id: 's1', registration: '123', passwordHash: 'h' },
       ]);
@@ -98,7 +98,7 @@ describe('AuthService', () => {
       expect(result).toEqual({ requiresPassword: true });
     });
 
-    it('autentica quando senha confere', async () => {
+    it('authenticates when password matches', async () => {
       db.queueResult([
         {
           id: 's1',
@@ -120,14 +120,14 @@ describe('AuthService', () => {
       });
     });
 
-    it('falha quando matrícula não existe', async () => {
+    it('throws UnauthorizedException when registration does not exist', async () => {
       db.queueResult([]);
       await expect(
         service.studentLogin({ registration: '999' }),
       ).rejects.toThrow(UnauthorizedException);
     });
 
-    it('falha quando senha incorreta', async () => {
+    it('throws UnauthorizedException when password is wrong', async () => {
       db.queueResult([
         { id: 's1', registration: '123', passwordHash: 'h', email: '', name: '' },
       ]);
@@ -139,7 +139,7 @@ describe('AuthService', () => {
   });
 
   describe('studentSetPassword', () => {
-    it('define senha quando aluno ainda não tem', async () => {
+    it('sets password when student has none', async () => {
       db.queueResult([
         {
           id: 's1',
@@ -150,7 +150,7 @@ describe('AuthService', () => {
         },
       ]);
       bcryptMock.hash.mockResolvedValue('hashed' as never);
-      db.queueResult([{ id: 's1' }]); // update returning (não usado aqui, mas chain consome)
+      db.queueResult([{ id: 's1' }]);
 
       const result = await service.studentSetPassword({
         registration: '123',
@@ -163,14 +163,14 @@ describe('AuthService', () => {
       expect(db.update).toHaveBeenCalled();
     });
 
-    it('falha com NotFound quando matrícula não existe', async () => {
+    it('throws NotFoundException when registration does not exist', async () => {
       db.queueResult([]);
       await expect(
         service.studentSetPassword({ registration: '999', password: 'p' }),
       ).rejects.toThrow(NotFoundException);
     });
 
-    it('falha com BadRequest quando aluno já tem senha', async () => {
+    it('throws BadRequestException when student already has a password', async () => {
       db.queueResult([{ id: 's1', registration: '123', passwordHash: 'h' }]);
       await expect(
         service.studentSetPassword({ registration: '123', password: 'p' }),

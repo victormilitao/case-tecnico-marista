@@ -26,19 +26,19 @@ describe('StudentsPage', () => {
     mocked(studentsApi.list).mockResolvedValue(sampleStudents);
   });
 
-  it('lista alunos retornados pelo backend', async () => {
+  it('lists students returned by the backend', async () => {
     render(<StudentsPage />);
     expect(await screen.findByText('Ana')).toBeInTheDocument();
     expect(screen.getByText('Bia')).toBeInTheDocument();
   });
 
-  it('mostra estado vazio quando lista retorna vazia', async () => {
+  it('shows empty state when list is empty', async () => {
     mocked(studentsApi.list).mockResolvedValue([]);
     render(<StudentsPage />);
     expect(await screen.findByText(/Nenhum aluno cadastrado/i)).toBeInTheDocument();
   });
 
-  it('abre modal de criação ao clicar em "+ Novo aluno"', async () => {
+  it('opens the create modal when clicking "+ Novo aluno"', async () => {
     render(<StudentsPage />);
     await screen.findByText('Ana');
     await userEvent.click(screen.getByRole('button', { name: /Novo aluno/i }));
@@ -47,7 +47,7 @@ describe('StudentsPage', () => {
     ).toBeInTheDocument();
   });
 
-  it('cria aluno e recarrega lista no submit', async () => {
+  it('creates student and reloads list on submit', async () => {
     mocked(studentsApi.create).mockResolvedValue({} as never);
     render(<StudentsPage />);
     await screen.findByText('Ana');
@@ -73,7 +73,7 @@ describe('StudentsPage', () => {
     await waitFor(() => expect(screen.getByText('Carla')).toBeInTheDocument());
   });
 
-  it('mostra erro de API no modal e mantém modal aberto', async () => {
+  it('shows API error inside the modal and keeps it open', async () => {
     mocked(studentsApi.create).mockRejectedValue(
       Object.assign(new Error('boom'), {
         isAxiosError: true,
@@ -92,7 +92,7 @@ describe('StudentsPage', () => {
     expect(screen.getByRole('heading', { name: 'Novo aluno' })).toBeInTheDocument();
   });
 
-  it('abre modal de edição com valores pré-preenchidos', async () => {
+  it('opens edit modal pre-filled with the student values', async () => {
     render(<StudentsPage />);
     const row = (await screen.findByText('Ana')).closest('tr')!;
     await userEvent.click(within(row).getByRole('button', { name: 'Editar' }));
@@ -104,7 +104,7 @@ describe('StudentsPage', () => {
     expect(screen.getByLabelText('Nome')).toHaveValue('Ana');
   });
 
-  it('atualiza aluno via PATCH ao salvar edição', async () => {
+  it('updates student via PATCH when saving the edit', async () => {
     mocked(studentsApi.update).mockResolvedValue({} as never);
     render(<StudentsPage />);
     const row = (await screen.findByText('Ana')).closest('tr')!;
@@ -123,7 +123,7 @@ describe('StudentsPage', () => {
     );
   });
 
-  it('cancela exclusão quando usuário recusa o confirm', async () => {
+  it('cancels deletion when user dismisses confirm', async () => {
     const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false);
     render(<StudentsPage />);
     const row = (await screen.findByText('Ana')).closest('tr')!;
@@ -133,7 +133,7 @@ describe('StudentsPage', () => {
     confirmSpy.mockRestore();
   });
 
-  it('exclui aluno quando usuário confirma', async () => {
+  it('deletes student when user confirms', async () => {
     const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
     mocked(studentsApi.remove).mockResolvedValue({} as never);
     mocked(studentsApi.list)

@@ -18,47 +18,47 @@ describe('AttendanceService', () => {
   describe('checkIn', () => {
     const dto = { studentId: 's1', roomId: 'r1' };
 
-    it('cria check-in quando aluno e sala existem e há vaga', async () => {
-      db.queueResult([{ id: 's1' }]); // student
-      db.queueResult([{ id: 'r1', capacity: 10, name: 'Lab' }]); // room
-      db.queueResult([]); // open for student
-      db.queueResult([]); // occupants
+    it('creates check-in when student and room exist and capacity allows', async () => {
+      db.queueResult([{ id: 's1' }]);
+      db.queueResult([{ id: 'r1', capacity: 10, name: 'Lab' }]);
+      db.queueResult([]);
+      db.queueResult([]);
       const created = { id: 'a1', studentId: 's1', roomId: 'r1' };
       db.queueResult([created]);
 
       await expect(service.checkIn(dto)).resolves.toEqual(created);
     });
 
-    it('falha quando aluno não existe', async () => {
+    it('throws NotFoundException when student does not exist', async () => {
       db.queueResult([]);
       await expect(service.checkIn(dto)).rejects.toThrow(NotFoundException);
     });
 
-    it('falha quando sala não existe', async () => {
+    it('throws NotFoundException when room does not exist', async () => {
       db.queueResult([{ id: 's1' }]);
       db.queueResult([]);
       await expect(service.checkIn(dto)).rejects.toThrow(NotFoundException);
     });
 
-    it('falha quando aluno já está em uma sala', async () => {
+    it('throws ConflictException when student is already in another room', async () => {
       db.queueResult([{ id: 's1' }]);
       db.queueResult([{ id: 'r1', capacity: 10, name: 'Lab' }]);
-      db.queueResult([{ id: 'a-aberto', roomId: 'r2' }]);
+      db.queueResult([{ id: 'a-open', roomId: 'r2' }]);
       await expect(service.checkIn(dto)).rejects.toThrow(ConflictException);
     });
 
-    it('falha quando capacidade está esgotada', async () => {
+    it('throws ConflictException when room capacity is full', async () => {
       db.queueResult([{ id: 's1' }]);
       db.queueResult([{ id: 'r1', capacity: 2, name: 'Lab' }]);
-      db.queueResult([]); // sem check-in aberto
-      db.queueResult([{ id: 'a1' }, { id: 'a2' }]); // 2 ocupantes (capacidade 2)
+      db.queueResult([]);
+      db.queueResult([{ id: 'a1' }, { id: 'a2' }]);
       await expect(service.checkIn(dto)).rejects.toThrow(/capacidade máxima/);
     });
   });
 
   describe('checkOut', () => {
-    it('finaliza check-in aberto e retorna duração', async () => {
-      const checkInAt = new Date(Date.now() - 30 * 60_000); // 30 min atrás
+    it('closes the open check-in and returns duration', async () => {
+      const checkInAt = new Date(Date.now() - 30 * 60_000);
       db.queueResult([{ id: 'a1', studentId: 's1', checkInAt }]);
       const checkOutAt = new Date();
       db.queueResult([{ id: 'a1', studentId: 's1', checkInAt, checkOutAt }]);
@@ -69,7 +69,7 @@ describe('AttendanceService', () => {
       expect(result.durationMinutes).toBeLessThanOrEqual(31);
     });
 
-    it('falha quando não há check-in aberto', async () => {
+    it('throws BadRequestException when there is no open check-in', async () => {
       db.queueResult([]);
       await expect(
         service.checkOut({ studentId: 's1' }),
@@ -78,9 +78,8 @@ describe('AttendanceService', () => {
   });
 
   describe('checkInByRegistration / checkOutByRegistration', () => {
-    it('checkInByRegistration converte registration em studentId', async () => {
-      db.queueResult([{ id: 's1', name: 'Ana' }]); // findStudentByRegistration
-      // chain do checkIn:
+    it('checkInByRegistration resolves registration to studentId', async () => {
+      db.queueResult([{ id: 's1', name: 'Ana' }]);
       db.queueResult([{ id: 's1' }]);
       db.queueResult([{ id: 'r1', capacity: 5, name: 'Lab' }]);
       db.queueResult([]);
@@ -92,7 +91,7 @@ describe('AttendanceService', () => {
       ).resolves.toEqual({ id: 'a1' });
     });
 
-    it('checkInByRegistration falha quando matrícula não existe', async () => {
+    it('checkInByRegistration throws when registration does not exist', async () => {
       db.queueResult([]);
       await expect(
         service.checkInByRegistration('999', 'r1'),
@@ -101,14 +100,14 @@ describe('AttendanceService', () => {
   });
 
   describe('getStatusByRegistration', () => {
-    it('retorna found=false quando matrícula não existe', async () => {
+    it('returns found=false when registration does not exist', async () => {
       db.queueResult([]);
       await expect(
         service.getStatusByRegistration('999'),
       ).resolves.toEqual({ found: false, activeCheckIn: null });
     });
 
-    it('retorna activeCheckIn=null quando aluno não tem check-in aberto', async () => {
+    it('returns activeCheckIn=null when student has no open check-in', async () => {
       db.queueResult([{ id: 's1', name: 'Ana' }]);
       db.queueResult([]);
       const result = await service.getStatusByRegistration('123');
@@ -116,7 +115,7 @@ describe('AttendanceService', () => {
       expect(result.activeCheckIn).toBeNull();
     });
 
-    it('retorna o check-in aberto quando existe', async () => {
+    it('returns the open check-in when present', async () => {
       db.queueResult([{ id: 's1', name: 'Ana' }]);
       const open = {
         id: 'a1',
@@ -130,7 +129,7 @@ describe('AttendanceService', () => {
   });
 
   describe('occupancyByRoom', () => {
-    it('retorna ocupação corrente da sala', async () => {
+    it('returns current room occupancy', async () => {
       db.queueResult([{ id: 'r1', name: 'Lab', capacity: 4 }]);
       db.queueResult([
         { attendanceId: 'a1', checkInAt: new Date(), student: { id: 's1', name: 'A', registration: '1' } },
@@ -143,7 +142,7 @@ describe('AttendanceService', () => {
       expect(result.occupancyRate).toBe(0.5);
     });
 
-    it('falha quando sala não existe', async () => {
+    it('throws NotFound when room does not exist', async () => {
       db.queueResult([]);
       await expect(service.occupancyByRoom('r1')).rejects.toThrow(
         NotFoundException,

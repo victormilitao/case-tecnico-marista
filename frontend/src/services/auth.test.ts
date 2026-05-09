@@ -17,7 +17,7 @@ describe('authApi', () => {
     vi.clearAllMocks();
   });
 
-  it('login chama POST /auth/login e desempacota data', async () => {
+  it('login posts to /auth/login and unwraps data', async () => {
     (api.post as never as ReturnType<typeof vi.fn>).mockResolvedValue({
       data: { accessToken: 't', user: { id: 'u1', role: 'admin' } },
     });
@@ -29,7 +29,7 @@ describe('authApi', () => {
     expect(res.accessToken).toBe('t');
   });
 
-  it('register envia name/email/password', async () => {
+  it('register sends name/email/password', async () => {
     (api.post as never as ReturnType<typeof vi.fn>).mockResolvedValue({
       data: { accessToken: 't', user: { id: 'u1' } },
     });
@@ -41,7 +41,7 @@ describe('authApi', () => {
     });
   });
 
-  it('me chama GET /auth/me', async () => {
+  it('me calls GET /auth/me', async () => {
     (api.get as never as ReturnType<typeof vi.fn>).mockResolvedValue({
       data: { id: 'u1', role: 'admin' },
     });
@@ -50,7 +50,7 @@ describe('authApi', () => {
     expect(res.id).toBe('u1');
   });
 
-  it('studentLogin envia password opcional', async () => {
+  it('studentLogin sends optional password', async () => {
     (api.post as never as ReturnType<typeof vi.fn>).mockResolvedValue({
       data: { requiresPasswordSetup: true },
     });
@@ -61,7 +61,7 @@ describe('authApi', () => {
     });
   });
 
-  it('studentSetPassword chama endpoint correto', async () => {
+  it('studentSetPassword posts to the correct endpoint', async () => {
     (api.post as never as ReturnType<typeof vi.fn>).mockResolvedValue({
       data: { accessToken: 't', user: { id: 's1' } },
     });

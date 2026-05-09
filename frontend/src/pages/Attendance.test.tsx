@@ -44,16 +44,15 @@ describe('AttendancePage', () => {
     vi.useRealTimers();
   });
 
-  it('lista histórico (paginado em 15 por página)', async () => {
+  it('lists history with 15-per-page pagination', async () => {
     render(<AttendancePage />);
     expect(await screen.findByText('Aluno 0')).toBeInTheDocument();
-    // a 20ª linha (index 19) só aparece na página 2
     expect(screen.queryByText('Outro 19')).not.toBeInTheDocument();
     expect(screen.getByText(/Página 1 de 2/i)).toBeInTheDocument();
     expect(screen.getByText(/Mostrando 1–15 de 20/i)).toBeInTheDocument();
   });
 
-  it('navega para a próxima página', async () => {
+  it('navigates to the next page', async () => {
     render(<AttendancePage />);
     await screen.findByText('Aluno 0');
     await userEvent.click(screen.getByRole('button', { name: 'Próxima' }));
@@ -61,11 +60,10 @@ describe('AttendancePage', () => {
     expect(screen.getByText(/Página 2 de 2/i)).toBeInTheDocument();
   });
 
-  it('filtra por nome do aluno (com debounce de 300ms)', async () => {
+  it('filters by student name (with 300ms debounce)', async () => {
     render(<AttendancePage />);
     await screen.findByText('Aluno 0');
     await userEvent.type(screen.getByLabelText(/Filtrar por aluno/i), 'Aluno');
-    // depois do debounce: só os 3 "Aluno N"
     await waitFor(
       () => expect(screen.queryByText('Outro 5')).not.toBeInTheDocument(),
       { timeout: 1000 },
@@ -74,7 +72,7 @@ describe('AttendancePage', () => {
     expect(screen.getByText(/de 3/i)).toBeInTheDocument();
   });
 
-  it('filtra por ambiente recarregando do backend', async () => {
+  it('filters by room reloading from the backend', async () => {
     render(<AttendancePage />);
     await screen.findByText('Aluno 0');
     mocked(attendanceApi.list).mockClear();
@@ -86,7 +84,7 @@ describe('AttendancePage', () => {
     expect(await screen.findByText(/Nenhum registro encontrado/i)).toBeInTheDocument();
   });
 
-  it('mostra estado vazio quando filtro não casa', async () => {
+  it('shows empty state when filter does not match', async () => {
     render(<AttendancePage />);
     await screen.findByText('Aluno 0');
     await userEvent.type(screen.getByLabelText(/Filtrar por aluno/i), 'inexistente');

@@ -22,14 +22,14 @@ describe('AuthContext', () => {
     localStorage.clear();
   });
 
-  it('inicia com user=null e loading=false quando não há token', async () => {
+  it('starts with user=null and loading=false when there is no token', async () => {
     const { result } = renderHook(() => useAuth(), { wrapper });
     await waitFor(() => expect(result.current.loading).toBe(false));
     expect(result.current.user).toBeNull();
     expect(authApi.me).not.toHaveBeenCalled();
   });
 
-  it('busca o usuário com token salvo no bootstrap', async () => {
+  it('fetches the user on bootstrap when a token exists', async () => {
     localStorage.setItem(TOKEN_KEY, 't');
     (authApi.me as never as ReturnType<typeof vi.fn>).mockResolvedValue({
       id: 'u1',
@@ -42,8 +42,8 @@ describe('AuthContext', () => {
     expect(result.current.user?.id).toBe('u1');
   });
 
-  it('limpa token quando authApi.me falha', async () => {
-    localStorage.setItem(TOKEN_KEY, 't-invalido');
+  it('clears the token when authApi.me fails', async () => {
+    localStorage.setItem(TOKEN_KEY, 't-invalid');
     (authApi.me as never as ReturnType<typeof vi.fn>).mockRejectedValue(
       new Error('401'),
     );
@@ -53,9 +53,9 @@ describe('AuthContext', () => {
     expect(localStorage.getItem(TOKEN_KEY)).toBeNull();
   });
 
-  it('login persiste token e seta user', async () => {
+  it('login persists the token and sets the user', async () => {
     (authApi.login as never as ReturnType<typeof vi.fn>).mockResolvedValue({
-      accessToken: 'novo-token',
+      accessToken: 'new-token',
       user: { id: 'u1', name: 'A', email: 'a@x.com', role: 'admin' },
     });
     const { result } = renderHook(() => useAuth(), { wrapper });
@@ -63,15 +63,15 @@ describe('AuthContext', () => {
     await act(async () => {
       await result.current.login('a@x.com', 'p');
     });
-    expect(localStorage.getItem(TOKEN_KEY)).toBe('novo-token');
+    expect(localStorage.getItem(TOKEN_KEY)).toBe('new-token');
     expect(result.current.user?.id).toBe('u1');
   });
 
-  it('applySession seta token e user diretamente (fluxo do aluno)', async () => {
+  it('applySession sets token and user directly (student flow)', async () => {
     const { result } = renderHook(() => useAuth(), { wrapper });
     await waitFor(() => expect(result.current.loading).toBe(false));
     act(() => {
-      result.current.applySession('t-aluno', {
+      result.current.applySession('student-token', {
         id: 's1',
         name: 'Ana',
         email: 'a@x.com',
@@ -79,11 +79,11 @@ describe('AuthContext', () => {
         registration: '123',
       });
     });
-    expect(localStorage.getItem(TOKEN_KEY)).toBe('t-aluno');
+    expect(localStorage.getItem(TOKEN_KEY)).toBe('student-token');
     expect(result.current.user?.role).toBe('student');
   });
 
-  it('logout limpa token e zera user', async () => {
+  it('logout clears token and resets user', async () => {
     localStorage.setItem(TOKEN_KEY, 't');
     (authApi.me as never as ReturnType<typeof vi.fn>).mockResolvedValue({
       id: 'u1',
@@ -98,8 +98,7 @@ describe('AuthContext', () => {
     expect(result.current.user).toBeNull();
   });
 
-  it('useAuth fora do provider lança erro', () => {
-    // Renderizamos um componente filho que usa o hook sem provider
+  it('useAuth throws when used outside the provider', () => {
     const Bad = () => {
       useAuth();
       return null;

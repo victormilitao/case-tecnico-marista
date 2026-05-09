@@ -24,11 +24,11 @@ export default defineConfig({
   ],
   webServer: [
     {
-      // Backend de teste — DATABASE_URL e PORT distintos do dev
+      // Backend with isolated DATABASE_URL/PORT so it never touches dev data.
       command: 'npm run start --prefix ../backend',
       cwd: __dirname,
+      // /api/auth/me responds 401 without a token (< 500) — Playwright accepts.
       url: `http://localhost:${TEST_BACKEND_PORT}/api/auth/me`,
-      // /api/auth/me responde 401 sem token (< 500) — Playwright aceita
       reuseExistingServer: !process.env.CI,
       timeout: 60_000,
       env: {
@@ -41,7 +41,6 @@ export default defineConfig({
       stderr: 'pipe',
     },
     {
-      // Frontend em dev mode com proxy /api → backend de teste (porta TEST_BACKEND_PORT)
       command: `npx vite --port ${TEST_FRONTEND_PORT} --strictPort`,
       cwd: __dirname + '/../frontend',
       url: `http://localhost:${TEST_FRONTEND_PORT}`,

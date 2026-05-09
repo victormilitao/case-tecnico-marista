@@ -15,13 +15,13 @@ vi.mock('./api', () => ({
 describe('studentsApi', () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it('list chama GET /students', async () => {
+  it('list calls GET /students', async () => {
     (api.get as never as ReturnType<typeof vi.fn>).mockResolvedValue({ data: [] });
     await studentsApi.list();
     expect(api.get).toHaveBeenCalledWith('/students');
   });
 
-  it('create envia payload completo', async () => {
+  it('create sends full payload', async () => {
     (api.post as never as ReturnType<typeof vi.fn>).mockResolvedValue({ data: { id: 's1' } });
     await studentsApi.create({ registration: '1', name: 'A', email: 'a@x.com' });
     expect(api.post).toHaveBeenCalledWith('/students', {
@@ -31,13 +31,13 @@ describe('studentsApi', () => {
     });
   });
 
-  it('update envia patch parcial no caminho com id', async () => {
+  it('update sends partial patch with id in path', async () => {
     (api.patch as never as ReturnType<typeof vi.fn>).mockResolvedValue({ data: { id: 's1' } });
     await studentsApi.update('s1', { name: 'B' });
     expect(api.patch).toHaveBeenCalledWith('/students/s1', { name: 'B' });
   });
 
-  it('remove chama DELETE com id', async () => {
+  it('remove calls DELETE with id', async () => {
     (api.delete as never as ReturnType<typeof vi.fn>).mockResolvedValue({ data: {} });
     await studentsApi.remove('s1');
     expect(api.delete).toHaveBeenCalledWith('/students/s1');

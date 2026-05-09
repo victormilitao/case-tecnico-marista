@@ -21,14 +21,14 @@ describe('AttendanceController (integration)', () => {
 
   afterEach(() => handle.close());
 
-  it('GET /api/attendance bloqueia para alunos', async () => {
+  it('GET /api/attendance is forbidden for students', async () => {
     await request(handle.app.getHttpServer())
       .get('/api/attendance')
       .set('X-Test-User', studentHeader)
       .expect(403);
   });
 
-  it('GET /api/attendance lista para admin', async () => {
+  it('GET /api/attendance lists for admin', async () => {
     db.queueResult([
       {
         id: 'a1',
@@ -45,7 +45,7 @@ describe('AttendanceController (integration)', () => {
     expect(res.body).toHaveLength(1);
   });
 
-  it('GET /api/attendance aceita filtros válidos', async () => {
+  it('GET /api/attendance accepts valid filters', async () => {
     db.queueResult([]);
     await request(handle.app.getHttpServer())
       .get('/api/attendance')
@@ -54,10 +54,10 @@ describe('AttendanceController (integration)', () => {
       .expect(200);
   });
 
-  it('GET /api/attendance rejeita studentId inválido', async () => {
+  it('GET /api/attendance rejects invalid studentId', async () => {
     await request(handle.app.getHttpServer())
       .get('/api/attendance')
-      .query({ studentId: 'nao-eh-uuid' })
+      .query({ studentId: 'not-a-uuid' })
       .set('X-Test-User', adminHeader)
       .expect(400);
   });

@@ -27,14 +27,14 @@ describe('RoomsPage', () => {
     mocked(roomsApi.list).mockResolvedValue(sampleRooms);
   });
 
-  it('lista ambientes com label de tipo traduzida', async () => {
+  it('lists rooms with translated type label', async () => {
     render(<RoomsPage />);
     expect(await screen.findByText('Lab A')).toBeInTheDocument();
     expect(screen.getByText('Laboratório')).toBeInTheDocument();
     expect(screen.getByText('Sala de aula')).toBeInTheDocument();
   });
 
-  it('cria ambiente convertendo capacidade para Number', async () => {
+  it('creates room converting capacity to Number', async () => {
     mocked(roomsApi.create).mockResolvedValue({} as never);
     render(<RoomsPage />);
     await screen.findByText('Lab A');
@@ -56,7 +56,7 @@ describe('RoomsPage', () => {
     );
   });
 
-  it('edita ambiente preservando os campos do formulário', async () => {
+  it('edits room preserving form fields', async () => {
     mocked(roomsApi.update).mockResolvedValue({} as never);
     render(<RoomsPage />);
     const row = (await screen.findByText('Lab A')).closest('tr')!;
@@ -76,7 +76,7 @@ describe('RoomsPage', () => {
     );
   });
 
-  it('exibe erro do backend no modal', async () => {
+  it('shows backend error inside the modal', async () => {
     mocked(roomsApi.create).mockRejectedValue(
       Object.assign(new Error('boom'), {
         isAxiosError: true,
