@@ -86,14 +86,14 @@ export function StudentsPage() {
   return (
     <div>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-xl font-bold text-slate-800 sm:text-2xl">Alunos</h1>
+        <h1 className="text-xl font-bold text-slate-800 dark:text-slate-100 sm:text-2xl">Alunos</h1>
         <Button onClick={openCreate}>+ Novo aluno</Button>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[640px] text-sm">
-          <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase text-slate-500">
+          <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase text-slate-500 dark:border-slate-700 dark:bg-slate-900/50 dark:text-slate-400">
             <tr>
               <th className="px-4 py-3">Matrícula</th>
               <th className="px-4 py-3">Nome</th>
@@ -101,27 +101,27 @@ export function StudentsPage() {
               <th className="px-4 py-3 text-right">Ações</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
             {loading ? (
               <tr>
-                <td colSpan={4} className="px-4 py-6 text-center text-slate-400">
+                <td colSpan={4} className="px-4 py-6 text-center text-slate-400 dark:text-slate-500">
                   Carregando...
                 </td>
               </tr>
             ) : students.length === 0 ? (
               <tr>
-                <td colSpan={4} className="px-4 py-6 text-center text-slate-400">
+                <td colSpan={4} className="px-4 py-6 text-center text-slate-400 dark:text-slate-500">
                   Nenhum aluno cadastrado
                 </td>
               </tr>
             ) : (
               students.map((s) => (
                 <tr key={s.id}>
-                  <td className="px-4 py-3 font-mono text-slate-700">
+                  <td className="px-4 py-3 font-mono text-slate-700 dark:text-slate-200">
                     {s.registration}
                   </td>
-                  <td className="px-4 py-3 text-slate-800">{s.name}</td>
-                  <td className="px-4 py-3 text-slate-600">{s.email}</td>
+                  <td className="px-4 py-3 text-slate-800 dark:text-slate-100">{s.name}</td>
+                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{s.email}</td>
                   <td className="whitespace-nowrap px-4 py-3 text-right">
                     <Button
                       variant="ghost"
@@ -133,7 +133,7 @@ export function StudentsPage() {
                     <Button
                       variant="ghost"
                       onClick={() => onDelete(s)}
-                      className="!px-2 !py-1 text-xs text-rose-600 hover:bg-rose-50"
+                      className="!px-2 !py-1 text-xs text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-500/10"
                     >
                       Excluir
                     </Button>
@@ -174,7 +174,7 @@ export function StudentsPage() {
             required
           />
           {error && (
-            <div className="rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-700">
+            <div className="rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-700 dark:bg-rose-500/10 dark:text-rose-300">
               {error}
             </div>
           )}

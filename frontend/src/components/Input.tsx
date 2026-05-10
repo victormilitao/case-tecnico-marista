@@ -16,17 +16,17 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   return (
     <label className="block">
       {label && (
-        <span className="mb-1 block text-sm font-medium text-slate-700">
+        <span className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-200">
           {label}
         </span>
       )}
       <input
         ref={ref}
         {...props}
-        className={`w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm leading-5 text-slate-900 shadow-sm focus:border-marista-navy focus:outline-none focus:ring-1 focus:ring-marista-navy ${className}`}
+        className={`w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm leading-5 text-slate-900 shadow-sm focus:border-marista-navy focus:outline-none focus:ring-1 focus:ring-marista-navy dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:border-marista-navy-light dark:focus:ring-marista-navy-light ${className}`}
       />
       {error && (
-        <span className="mt-1 block text-xs text-rose-600">{error}</span>
+        <span className="mt-1 block text-xs text-rose-600 dark:text-rose-400">{error}</span>
       )}
     </label>
   );
@@ -49,7 +49,7 @@ export function Select({
   return (
     <label className="block">
       {label && (
-        <span className="mb-1 block text-sm font-medium text-slate-700">
+        <span className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-200">
           {label}
         </span>
       )}
@@ -62,7 +62,7 @@ export function Select({
           backgroundSize: '1rem 1rem',
           ...style,
         }}
-        className={`w-full appearance-none rounded-md border border-slate-300 bg-white py-2 pl-3 pr-9 text-sm leading-5 text-slate-900 shadow-sm focus:border-marista-navy focus:outline-none focus:ring-1 focus:ring-marista-navy ${className}`}
+        className={`w-full appearance-none rounded-md border border-slate-300 bg-white py-2 pl-3 pr-9 text-sm leading-5 text-slate-900 shadow-sm focus:border-marista-navy focus:outline-none focus:ring-1 focus:ring-marista-navy dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-marista-navy-light dark:focus:ring-marista-navy-light ${className}`}
       >
         {children}
       </select>

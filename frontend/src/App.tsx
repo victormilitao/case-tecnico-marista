@@ -5,6 +5,7 @@ import {
   Routes,
 } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { Layout } from './components/Layout';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { HomePage } from './pages/Home';
@@ -18,29 +19,31 @@ import { AttendancePage } from './pages/Attendance';
 
 export default function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/aluno/login" element={<StudentLoginPage />} />
+    <ThemeProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/aluno/login" element={<StudentLoginPage />} />
 
-          <Route element={<ProtectedRoute role="admin" />}>
-            <Route element={<Layout />}>
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/attendance" element={<AttendancePage />} />
-              <Route path="/students" element={<StudentsPage />} />
-              <Route path="/rooms" element={<RoomsPage />} />
+            <Route element={<ProtectedRoute role="admin" />}>
+              <Route element={<Layout />}>
+                <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/attendance" element={<AttendancePage />} />
+                <Route path="/students" element={<StudentsPage />} />
+                <Route path="/rooms" element={<RoomsPage />} />
+              </Route>
             </Route>
-          </Route>
 
-          <Route element={<ProtectedRoute role="student" />}>
-            <Route path="/aluno" element={<StudentDashboardPage />} />
-          </Route>
+            <Route element={<ProtectedRoute role="student" />}>
+              <Route path="/aluno" element={<StudentDashboardPage />} />
+            </Route>
 
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
