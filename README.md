@@ -89,7 +89,14 @@ DATABASE_URL=postgres://marista:marista@localhost:5434/marista
 JWT_SECRET=change-me-in-production
 JWT_EXPIRES_IN=1d
 PORT=3333
+
+# Sentry (opcional)
+SENTRY_DSN=
+SENTRY_ENVIRONMENT=development
+SENTRY_TRACES_SAMPLE_RATE=0
 ```
+
+> Se `SENTRY_DSN` estiver vazio o Sentry não é inicializado e a aplicação roda normalmente.
 
 #### Criando o primeiro usuário admin
 
@@ -114,6 +121,13 @@ npm run dev            # http://localhost:5173
 ```
 
 O frontend espera a API em `http://localhost:3333/api` (ver `frontend/src/services/api.ts`).
+
+Variáveis (opcionais) em `frontend/.env`:
+
+```env
+VITE_SENTRY_DSN=
+VITE_SENTRY_TRACES_SAMPLE_RATE=0
+```
 
 ---
 
