@@ -9,6 +9,7 @@ const navItems = [
   { to: '/attendance', label: 'Histórico' },
   { to: '/students', label: 'Alunos' },
   { to: '/rooms', label: 'Ambientes' },
+  { to: '/audit-logs', label: 'Auditoria' },
 ];
 
 export function Layout() {
