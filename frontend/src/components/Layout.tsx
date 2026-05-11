@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Icon } from './Icon';
+import { ThemeToggle } from './ThemeToggle';
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard' },
@@ -16,8 +17,8 @@ export function Layout() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="bg-marista-navy">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+      <header className="bg-marista-navy dark:bg-marista-navy-dark">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div className="flex min-w-0 items-center gap-4 sm:gap-8">
             <span className="truncate text-base font-bold text-white sm:text-lg">
@@ -45,6 +46,7 @@ export function Layout() {
             <span className="max-w-[12rem] truncate text-white/90">
               {user?.name}
             </span>
+            <ThemeToggle />
             <button
               onClick={logout}
               className="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-white/80 hover:bg-white/10 hover:text-white"
@@ -68,7 +70,7 @@ export function Layout() {
           </button>
         </div>
         {menuOpen && (
-          <div className="border-t border-white/15 bg-marista-navy md:hidden">
+          <div className="border-t border-white/15 bg-marista-navy dark:bg-marista-navy-dark md:hidden">
             <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-3 sm:px-6">
               {navItems.map((item) => (
                 <NavLink
@@ -86,18 +88,21 @@ export function Layout() {
                   {item.label}
                 </NavLink>
               ))}
-              <div className="mt-2 flex items-center justify-between border-t border-white/15 pt-3 text-sm">
+              <div className="mt-2 flex items-center justify-between gap-2 border-t border-white/15 pt-3 text-sm">
                 <span className="truncate text-white/90">{user?.name}</span>
-                <button
-                  onClick={() => {
-                    setMenuOpen(false);
-                    logout();
-                  }}
-                  className="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-white/80 hover:bg-white/10 hover:text-white"
-                >
-                  <Icon name="log-out" className="h-4 w-4" strokeWidth={2} />
-                  Sair
-                </button>
+                <div className="flex items-center gap-1">
+                  <ThemeToggle />
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      logout();
+                    }}
+                    className="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-white/80 hover:bg-white/10 hover:text-white"
+                  >
+                    <Icon name="log-out" className="h-4 w-4" strokeWidth={2} />
+                    Sair
+                  </button>
+                </div>
               </div>
             </nav>
           </div>

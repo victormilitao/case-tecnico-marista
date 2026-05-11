@@ -18,9 +18,9 @@ const ACTION_LABELS: Record<AuditAction, string> = {
 };
 
 const ACTION_BADGE: Record<AuditAction, string> = {
-  create: 'bg-emerald-100 text-emerald-700',
-  update: 'bg-amber-100 text-amber-700',
-  delete: 'bg-rose-100 text-rose-700',
+  create: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300',
+  update: 'bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300',
+  delete: 'bg-rose-100 text-rose-700 dark:bg-rose-500/15 dark:text-rose-300',
 };
 
 export function AuditLogsPage() {
@@ -64,10 +64,10 @@ export function AuditLogsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-xl font-bold text-slate-800 sm:text-2xl">
+        <h1 className="text-xl font-bold text-slate-800 dark:text-slate-100 sm:text-2xl">
           Auditoria
         </h1>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
           Histórico de ações administrativas (criação, edição e exclusão).
         </p>
       </div>
@@ -94,10 +94,10 @@ export function AuditLogsPage() {
         </Select>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[720px] text-sm">
-            <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase text-slate-500">
+            <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase text-slate-500 dark:border-slate-700 dark:bg-slate-900/50 dark:text-slate-400">
               <tr>
                 <th className="px-4 py-3">Quando</th>
                 <th className="px-4 py-3">Quem</th>
@@ -106,16 +106,16 @@ export function AuditLogsPage() {
                 <th className="px-4 py-3">Detalhes</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="px-4 py-6 text-center text-slate-400">
+                  <td colSpan={5} className="px-4 py-6 text-center text-slate-400 dark:text-slate-500">
                     Carregando...
                   </td>
                 </tr>
               ) : items.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-4 py-6 text-center text-slate-400">
+                  <td colSpan={5} className="px-4 py-6 text-center text-slate-400 dark:text-slate-500">
                     Nenhum registro encontrado
                   </td>
                 </tr>
@@ -124,10 +124,10 @@ export function AuditLogsPage() {
                   const isOpen = expandedId === log.id;
                   return (
                     <tr key={log.id} className="align-top">
-                      <td className="whitespace-nowrap px-4 py-3 text-slate-600">
+                      <td className="whitespace-nowrap px-4 py-3 text-slate-600 dark:text-slate-300">
                         {new Date(log.createdAt).toLocaleString()}
                       </td>
-                      <td className="px-4 py-3 text-slate-700">
+                      <td className="px-4 py-3 text-slate-700 dark:text-slate-200">
                         {log.userEmail}
                       </td>
                       <td className="px-4 py-3">
@@ -137,10 +137,10 @@ export function AuditLogsPage() {
                           {ACTION_LABELS[log.action]}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-slate-700">
+                      <td className="px-4 py-3 text-slate-700 dark:text-slate-200">
                         {ENTITY_LABELS[log.entity] ?? log.entity}
                         {log.entityId && (
-                          <div className="font-mono text-xs text-slate-400">
+                          <div className="font-mono text-xs text-slate-400 dark:text-slate-500">
                             {log.entityId}
                           </div>
                         )}
@@ -153,18 +153,18 @@ export function AuditLogsPage() {
                               onClick={() =>
                                 setExpandedId(isOpen ? null : log.id)
                               }
-                              className="text-xs font-medium text-marista-navy hover:underline"
+                              className="text-xs font-medium text-marista-navy hover:underline dark:text-marista-navy-light"
                             >
                               {isOpen ? 'Ocultar' : 'Ver payload'}
                             </button>
                             {isOpen && (
-                              <pre className="mt-2 max-w-md overflow-x-auto rounded bg-slate-50 p-2 text-xs text-slate-700">
+                              <pre className="mt-2 max-w-md overflow-x-auto rounded bg-slate-50 p-2 text-xs text-slate-700 dark:bg-slate-900/50 dark:text-slate-200">
                                 {JSON.stringify(log.payload, null, 2)}
                               </pre>
                             )}
                           </>
                         ) : (
-                          <span className="text-xs text-slate-400">—</span>
+                          <span className="text-xs text-slate-400 dark:text-slate-500">—</span>
                         )}
                       </td>
                     </tr>
@@ -175,7 +175,7 @@ export function AuditLogsPage() {
           </table>
         </div>
         {!loading && total > 0 && (
-          <div className="flex flex-col items-center justify-between gap-2 border-t border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600 sm:flex-row">
+          <div className="flex flex-col items-center justify-between gap-2 border-t border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600 dark:border-slate-700 dark:bg-slate-900/50 dark:text-slate-300 sm:flex-row">
             <span>
               Mostrando {(page - 1) * PAGE_SIZE + 1}–
               {Math.min(page * PAGE_SIZE, total)} de {total}
