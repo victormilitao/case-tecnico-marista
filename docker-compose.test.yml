@@ -1,0 +1,21 @@
+# Postgres efêmero para testes — rede/projeto próprios (não colide com docker-compose.yml).
+# Uso: ./scripts/with-test-postgres.sh <comando...>
+#
+# URL local: postgres://marista:marista@localhost:5435/marista
+name: marista-test
+
+services:
+  postgres-test:
+    image: postgres:16-alpine
+    container_name: marista-postgres-test
+    environment:
+      POSTGRES_USER: marista
+      POSTGRES_PASSWORD: marista
+      POSTGRES_DB: marista
+    ports:
+      - '5435:5432'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U marista -d marista']
+      interval: 2s
+      timeout: 5s
+      retries: 20
