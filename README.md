@@ -49,7 +49,7 @@ Aplicação web para gerenciar o uso de ambientes de ensino (salas de aula, labo
 - **Tailwind CSS 3**
 
 ### Infraestrutura
-- **Docker Compose** subindo PostgreSQL na porta `5434`.
+- **Docker Compose** subindo a stack completa: PostgreSQL, backend (NestJS) e frontend (Nginx servindo o build do Vite).
 
 ---
 
@@ -62,17 +62,35 @@ Aplicação web para gerenciar o uso de ambientes de ensino (salas de aula, labo
 
 ## Como iniciar
 
-### 1. Subir o banco de dados
+### Opção A — Stack completa via Docker Compose
+
+Sobe Postgres, backend e frontend de uma vez:
+
+```bash
+docker compose up -d --build
+```
+
+- Frontend (Nginx): http://localhost:8080
+- Backend (API): http://localhost:3333/api
+- Postgres: `localhost:5434` (usuário/senha/db: `marista`)
+
+O backend aplica as migrations automaticamente no start. Variáveis sensíveis (`JWT_SECRET`, `JWT_EXPIRES_IN`) podem ser sobrescritas via `.env` na raiz.
+
+Ainda é preciso criar o primeiro admin (ver seção abaixo) — apontando o curl para `http://localhost:3333/api/auth/register`.
+
+### Opção B — Desenvolvimento local
+
+#### 1. Subir o banco de dados
 
 Na raiz do projeto:
 
 ```bash
-docker compose up -d
+docker compose up -d postgres
 ```
 
 Sobe um Postgres em `localhost:5434` (usuário/senha/db: `marista`).
 
-### 2. Backend
+#### 2. Backend
 
 ```bash
 cd backend
@@ -103,7 +121,7 @@ curl -X POST http://localhost:3333/api/auth/register \
 
 > Em produção, este endpoint deve ser protegido ou removido.
 
-### 3. Frontend
+#### 3. Frontend
 
 Em outro terminal:
 
@@ -201,7 +219,11 @@ npm run preview        # preview do build
 
 ---
 
-## Próximos passos sugeridos
+## Próximos passos / TODO
 
-- Adicionar testes e2e cobrindo o fluxo de check-in/check-out.
-- Métricas históricas de ocupação (não só o snapshot atual).
+- [x] **Docker para subir tudo** — Compose com Postgres + backend + frontend (Nginx).
+- [ ] **Tema escuro** no frontend (toggle persistente, paleta via Tailwind).
+- [ ] **Observabilidade com Sentry** (plano gratuito) — captura de erros no backend (NestJS) e no frontend (React), com release/source maps.
+- [ ] **Auditoria das ações do administrador** — registrar quem criou/alterou/deletou alunos, ambientes e usuários, com tela de consulta (ator, ação, entidade, antes/depois, timestamp).
+- [ ] Testes e2e cobrindo o fluxo de check-in/check-out.
+- [ ] Métricas históricas de ocupação (não só o snapshot atual).
