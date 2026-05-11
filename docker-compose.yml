@@ -43,5 +43,23 @@ services:
     depends_on:
       - backend
 
+  postgres-test:
+    image: postgres:16-alpine
+    container_name: marista-postgres-test
+    profiles: ['test']
+    environment:
+      POSTGRES_USER: marista
+      POSTGRES_PASSWORD: marista
+      POSTGRES_DB: marista_test
+    ports:
+      - '5435:5432'
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U marista -d marista_test']
+      interval: 3s
+      timeout: 3s
+      retries: 15
+
 volumes:
   marista-pgdata:
