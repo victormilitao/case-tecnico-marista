@@ -53,3 +53,23 @@ export interface Occupancy {
   capacity: number;
   occupancyRate: number;
 }
+
+export type AuditAction = 'create' | 'update' | 'delete';
+
+export interface AuditLog {
+  id: string;
+  userId: string | null;
+  userEmail: string;
+  action: AuditAction;
+  entity: string;
+  entityId: string | null;
+  payload: unknown;
+  createdAt: string;
+}
+
+export interface AuditLogPage {
+  items: AuditLog[];
+  page: number;
+  pageSize: number;
+  total: number;
+}
