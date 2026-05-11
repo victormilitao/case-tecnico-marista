@@ -77,7 +77,7 @@ export function StudentDashboardPage() {
   const active = status?.activeCheckIn ?? null;
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-app">
       <header className="bg-marista-teal dark:bg-marista-teal-dark">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div className="flex min-w-0 items-center gap-2 sm:gap-3">
@@ -110,11 +110,11 @@ export function StudentDashboardPage() {
       </header>
 
       <main className="mx-auto max-w-5xl space-y-6 px-4 py-6 sm:px-6 sm:py-8">
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-800 sm:p-6">
-          <h1 className="text-xl font-bold text-slate-800 dark:text-slate-100 sm:text-2xl">
+        <section className="rounded-2xl border border-line bg-surface p-5 shadow-sm sm:p-6">
+          <h1 className="text-xl font-bold text-primary sm:text-2xl">
             Olá, {user?.name?.split(' ')[0]}!
           </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-sm text-muted">
             Registre sua entrada e saída nos ambientes de ensino.
           </p>
 
@@ -130,7 +130,7 @@ export function StudentDashboardPage() {
           )}
 
           {loading ? (
-            <div className="mt-6 text-sm text-slate-400 dark:text-slate-500">Carregando...</div>
+            <div className="mt-6 text-sm text-subtle">Carregando...</div>
           ) : active ? (
             <div className="mt-6 rounded-xl border border-marista-teal-light bg-marista-teal-light/40 p-5 dark:border-marista-teal-dark/60 dark:bg-marista-teal-dark/30">
               <div className="text-xs font-semibold uppercase tracking-wider text-marista-teal-dark dark:text-marista-teal-light">
@@ -139,7 +139,7 @@ export function StudentDashboardPage() {
               <div className="mt-1 break-words text-xl font-bold text-marista-teal-dark dark:text-marista-teal-light">
                 {active.room.name}
               </div>
-              <div className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+              <div className="mt-1 text-sm text-muted">
                 Entrada em {new Date(active.checkInAt).toLocaleString()}
               </div>
               <button
@@ -178,18 +178,18 @@ export function StudentDashboardPage() {
 
         <section>
           <div className="mb-3">
-            <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
+            <h2 className="text-lg font-bold text-primary">
               Meu histórico de presença
             </h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
+            <p className="text-sm text-muted">
               Registros de entrada e saída em sua conta.
             </p>
           </div>
 
-          <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
+          <div className="overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
             <div className="overflow-x-auto">
               <table className="w-full min-w-[640px] text-sm">
-                <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase text-slate-500 dark:border-slate-700 dark:bg-slate-900/50 dark:text-slate-400">
+                <thead className="border-b border-line bg-surface-muted text-left text-xs uppercase text-muted">
                   <tr>
                     <th className="px-4 py-3">Ambiente</th>
                     <th className="px-4 py-3">Entrada</th>
@@ -197,27 +197,27 @@ export function StudentDashboardPage() {
                     <th className="px-4 py-3">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+                <tbody className="divide-y divide-line">
                   {loading ? (
                     <tr>
-                      <td colSpan={4} className="px-4 py-6 text-center text-slate-400 dark:text-slate-500">
+                      <td colSpan={4} className="px-4 py-6 text-center text-subtle">
                         Carregando...
                       </td>
                     </tr>
                   ) : history.length === 0 ? (
                     <tr>
-                      <td colSpan={4} className="px-4 py-6 text-center text-slate-400 dark:text-slate-500">
+                      <td colSpan={4} className="px-4 py-6 text-center text-subtle">
                         Você ainda não tem registros.
                       </td>
                     </tr>
                   ) : (
                     history.map((h) => (
                       <tr key={h.id}>
-                        <td className="px-4 py-3 text-slate-800 dark:text-slate-100">{h.room.name}</td>
-                        <td className="px-4 py-3 whitespace-nowrap text-slate-600 dark:text-slate-300">
+                        <td className="px-4 py-3 text-primary">{h.room.name}</td>
+                        <td className="px-4 py-3 whitespace-nowrap text-muted">
                           {new Date(h.checkInAt).toLocaleString()}
                         </td>
-                        <td className="px-4 py-3 whitespace-nowrap text-slate-600 dark:text-slate-300">
+                        <td className="px-4 py-3 whitespace-nowrap text-muted">
                           {h.checkOutAt
                             ? new Date(h.checkOutAt).toLocaleString()
                             : '—'}

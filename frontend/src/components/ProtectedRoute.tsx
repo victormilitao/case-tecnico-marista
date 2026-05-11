@@ -10,7 +10,7 @@ export function ProtectedRoute({ role }: Props) {
   const { user, loading } = useAuth();
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-slate-500">
+      <div className="flex min-h-screen items-center justify-center bg-app text-primary">
         Carregando...
       </div>
     );

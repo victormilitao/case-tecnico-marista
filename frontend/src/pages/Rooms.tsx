@@ -83,14 +83,14 @@ export function RoomsPage() {
   return (
     <div>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-xl font-bold text-slate-800 dark:text-slate-100 sm:text-2xl">Ambientes</h1>
+        <h1 className="text-xl font-bold text-primary sm:text-2xl">Ambientes</h1>
         <Button onClick={openCreate}>+ Novo ambiente</Button>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
+      <div className="overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[640px] text-sm">
-          <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase text-slate-500 dark:border-slate-700 dark:bg-slate-900/50 dark:text-slate-400">
+          <thead className="border-b border-line bg-surface-muted text-left text-xs uppercase text-muted">
             <tr>
               <th className="px-4 py-3">Nome</th>
               <th className="px-4 py-3">Tipo</th>
@@ -98,27 +98,27 @@ export function RoomsPage() {
               <th className="px-4 py-3 text-right">Ações</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+          <tbody className="divide-y divide-line">
             {loading ? (
               <tr>
-                <td colSpan={4} className="px-4 py-6 text-center text-slate-400 dark:text-slate-500">
+                <td colSpan={4} className="px-4 py-6 text-center text-subtle">
                   Carregando...
                 </td>
               </tr>
             ) : rooms.length === 0 ? (
               <tr>
-                <td colSpan={4} className="px-4 py-6 text-center text-slate-400 dark:text-slate-500">
+                <td colSpan={4} className="px-4 py-6 text-center text-subtle">
                   Nenhum ambiente cadastrado
                 </td>
               </tr>
             ) : (
               rooms.map((r) => (
                 <tr key={r.id}>
-                  <td className="px-4 py-3 text-slate-800 dark:text-slate-100">{r.name}</td>
-                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
+                  <td className="px-4 py-3 text-primary">{r.name}</td>
+                  <td className="px-4 py-3 text-muted">
                     {ROOM_TYPE_LABELS[r.type]}
                   </td>
-                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{r.capacity}</td>
+                  <td className="px-4 py-3 text-muted">{r.capacity}</td>
                   <td className="whitespace-nowrap px-4 py-3 text-right">
                     <Button
                       variant="ghost"

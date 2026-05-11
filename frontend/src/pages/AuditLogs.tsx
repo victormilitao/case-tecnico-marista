@@ -64,10 +64,10 @@ export function AuditLogsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-xl font-bold text-slate-800 dark:text-slate-100 sm:text-2xl">
+        <h1 className="text-xl font-bold text-primary sm:text-2xl">
           Auditoria
         </h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400">
+        <p className="text-sm text-muted">
           Histórico de ações administrativas (criação, edição e exclusão).
         </p>
       </div>
@@ -94,10 +94,10 @@ export function AuditLogsPage() {
         </Select>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
+      <div className="overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[720px] text-sm">
-            <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase text-slate-500 dark:border-slate-700 dark:bg-slate-900/50 dark:text-slate-400">
+            <thead className="border-b border-line bg-surface-muted text-left text-xs uppercase text-muted">
               <tr>
                 <th className="px-4 py-3">Quando</th>
                 <th className="px-4 py-3">Quem</th>
@@ -106,16 +106,16 @@ export function AuditLogsPage() {
                 <th className="px-4 py-3">Detalhes</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+            <tbody className="divide-y divide-line">
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="px-4 py-6 text-center text-slate-400 dark:text-slate-500">
+                  <td colSpan={5} className="px-4 py-6 text-center text-subtle">
                     Carregando...
                   </td>
                 </tr>
               ) : items.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-4 py-6 text-center text-slate-400 dark:text-slate-500">
+                  <td colSpan={5} className="px-4 py-6 text-center text-subtle">
                     Nenhum registro encontrado
                   </td>
                 </tr>
@@ -124,10 +124,10 @@ export function AuditLogsPage() {
                   const isOpen = expandedId === log.id;
                   return (
                     <tr key={log.id} className="align-top">
-                      <td className="whitespace-nowrap px-4 py-3 text-slate-600 dark:text-slate-300">
+                      <td className="whitespace-nowrap px-4 py-3 text-muted">
                         {new Date(log.createdAt).toLocaleString()}
                       </td>
-                      <td className="px-4 py-3 text-slate-700 dark:text-slate-200">
+                      <td className="px-4 py-3 text-body">
                         {log.userEmail}
                       </td>
                       <td className="px-4 py-3">
@@ -137,10 +137,10 @@ export function AuditLogsPage() {
                           {ACTION_LABELS[log.action]}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-slate-700 dark:text-slate-200">
+                      <td className="px-4 py-3 text-body">
                         {ENTITY_LABELS[log.entity] ?? log.entity}
                         {log.entityId && (
-                          <div className="font-mono text-xs text-slate-400 dark:text-slate-500">
+                          <div className="font-mono text-xs text-subtle">
                             {log.entityId}
                           </div>
                         )}
@@ -158,13 +158,13 @@ export function AuditLogsPage() {
                               {isOpen ? 'Ocultar' : 'Ver payload'}
                             </button>
                             {isOpen && (
-                              <pre className="mt-2 max-w-md overflow-x-auto rounded bg-slate-50 p-2 text-xs text-slate-700 dark:bg-slate-900/50 dark:text-slate-200">
+                              <pre className="mt-2 max-w-md overflow-x-auto rounded bg-surface-muted p-2 text-xs text-body">
                                 {JSON.stringify(log.payload, null, 2)}
                               </pre>
                             )}
                           </>
                         ) : (
-                          <span className="text-xs text-slate-400 dark:text-slate-500">—</span>
+                          <span className="text-xs text-subtle">—</span>
                         )}
                       </td>
                     </tr>
@@ -175,7 +175,7 @@ export function AuditLogsPage() {
           </table>
         </div>
         {!loading && total > 0 && (
-          <div className="flex flex-col items-center justify-between gap-2 border-t border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600 dark:border-slate-700 dark:bg-slate-900/50 dark:text-slate-300 sm:flex-row">
+          <div className="flex flex-col items-center justify-between gap-2 border-t border-line bg-surface-muted px-4 py-3 text-sm text-muted sm:flex-row">
             <span>
               Mostrando {(page - 1) * PAGE_SIZE + 1}–
               {Math.min(page * PAGE_SIZE, total)} de {total}
