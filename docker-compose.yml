@@ -17,5 +17,49 @@ services:
       timeout: 5s
       retries: 10
 
+  backend:
+    build:
+      context: ./backend
+    container_name: marista-backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgres://marista:marista@postgres:5432/marista
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-1d}
+      PORT: 3333
+    ports:
+      - '3333:3333'
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: marista-frontend
+    restart: unless-stopped
+    ports:
+      - '8080:80'
+    depends_on:
+      - backend
+
+  postgres-test:
+    image: postgres:16-alpine
+    container_name: marista-postgres-test
+    profiles: ['test']
+    environment:
+      POSTGRES_USER: marista
+      POSTGRES_PASSWORD: marista
+      POSTGRES_DB: marista_test
+    ports:
+      - '5435:5432'
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U marista -d marista_test']
+      interval: 3s
+      timeout: 3s
+      retries: 15
+
 volumes:
   marista-pgdata:
