@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --color-bg-app: theme('colors.slate.50');
+    --color-bg-surface: theme('colors.white');
+    --color-bg-surface-muted: theme('colors.slate.50');
+    --color-border-line: theme('colors.slate.200');
+    --color-text-primary: theme('colors.slate.800');
+    --color-text-body: theme('colors.slate.700');
+    --color-text-muted: theme('colors.slate.500');
+    --color-text-subtle: theme('colors.slate.400');
+  }
+
+  .dark {
+    --color-bg-app: theme('colors.slate.900');
+    --color-bg-surface: theme('colors.slate.800');
+    --color-bg-surface-muted: rgb(15 23 42 / 0.5);
+    --color-border-line: theme('colors.slate.700');
+    --color-text-primary: theme('colors.slate.100');
+    --color-text-body: theme('colors.slate.200');
+    --color-text-muted: theme('colors.slate.400');
+    --color-text-subtle: theme('colors.slate.500');
+  }
+}

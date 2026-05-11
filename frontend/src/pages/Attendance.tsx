@@ -67,10 +67,10 @@ export function AttendancePage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-xl font-bold text-slate-800 dark:text-slate-100 sm:text-2xl">
+        <h1 className="text-xl font-bold text-primary sm:text-2xl">
           Histórico de presença
         </h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400">
+        <p className="text-sm text-muted">
           Visualização dos registros de entrada e saída feitos pelos alunos.
         </p>
       </div>
@@ -96,10 +96,10 @@ export function AttendancePage() {
         </Select>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
+      <div className="overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[720px] text-sm">
-          <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase text-slate-500 dark:border-slate-700 dark:bg-slate-900/50 dark:text-slate-400">
+          <thead className="border-b border-line bg-surface-muted text-left text-xs uppercase text-muted">
             <tr>
               <th className="px-4 py-3">Aluno</th>
               <th className="px-4 py-3">Ambiente</th>
@@ -108,33 +108,33 @@ export function AttendancePage() {
               <th className="px-4 py-3">Status</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+          <tbody className="divide-y divide-line">
             {loading ? (
               <tr>
-                <td colSpan={5} className="px-4 py-6 text-center text-slate-400 dark:text-slate-500">
+                <td colSpan={5} className="px-4 py-6 text-center text-subtle">
                   Carregando...
                 </td>
               </tr>
             ) : filteredHistory.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-4 py-6 text-center text-slate-400 dark:text-slate-500">
+                <td colSpan={5} className="px-4 py-6 text-center text-subtle">
                   Nenhum registro encontrado
                 </td>
               </tr>
             ) : (
               pagedHistory.map((h) => (
                 <tr key={h.id}>
-                  <td className="px-4 py-3 text-slate-800 dark:text-slate-100">
+                  <td className="px-4 py-3 text-primary">
                     {h.student.name}
-                    <div className="font-mono text-xs text-slate-400 dark:text-slate-500">
+                    <div className="font-mono text-xs text-subtle">
                       {h.student.registration}
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{h.room.name}</td>
-                  <td className="whitespace-nowrap px-4 py-3 text-slate-600 dark:text-slate-300">
+                  <td className="px-4 py-3 text-muted">{h.room.name}</td>
+                  <td className="whitespace-nowrap px-4 py-3 text-muted">
                     {new Date(h.checkInAt).toLocaleString()}
                   </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-slate-600 dark:text-slate-300">
+                  <td className="whitespace-nowrap px-4 py-3 text-muted">
                     {h.checkOutAt
                       ? new Date(h.checkOutAt).toLocaleString()
                       : '—'}
@@ -157,7 +157,7 @@ export function AttendancePage() {
           </table>
         </div>
         {!loading && filteredHistory.length > 0 && (
-          <div className="flex flex-col items-center justify-between gap-2 border-t border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600 dark:border-slate-700 dark:bg-slate-900/50 dark:text-slate-300 sm:flex-row">
+          <div className="flex flex-col items-center justify-between gap-2 border-t border-line bg-surface-muted px-4 py-3 text-sm text-muted sm:flex-row">
             <span>
               Mostrando {(currentPage - 1) * PAGE_SIZE + 1}–
               {Math.min(currentPage * PAGE_SIZE, filteredHistory.length)} de{' '}
