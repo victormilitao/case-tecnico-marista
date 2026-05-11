@@ -8,12 +8,14 @@ Aplicação web para gerenciar o uso de ambientes de ensino (salas de aula, labo
 
 ## O que a aplicação faz
 
-- **Autenticação JWT** para os usuários administrativos.
-- **CRUD de alunos** (matrícula, nome, e-mail).
-- **CRUD de ambientes** (nome, tipo: sala de aula / laboratório / sala de estudos, capacidade).
-- **Registro de presença** (check-in / check-out) dos alunos nos ambientes.
-- **Modo Kiosk** — tela pública para o aluno registrar entrada e saída usando a matrícula, sem necessidade de login administrativo.
-- **Dashboard** com a taxa de ocupação dos ambientes em tempo real.
+- **Autenticação JWT** com dois papéis: administrador e aluno.
+- **CRUD de alunos** (matrícula, nome, e-mail) — pelo admin.
+- **CRUD de ambientes** (nome, tipo: sala de aula / laboratório / sala de estudos, capacidade) — pelo admin.
+- **Área do aluno**: login por matrícula (com cadastro de senha no primeiro acesso), check-in / check-out em um ambiente e histórico pessoal de presenças.
+- **Dashboard administrativo** com a taxa de ocupação dos ambientes em tempo real.
+- **Histórico geral de presenças** para o admin, com filtros.
+- **Auditoria** das ações do admin (create / update / delete de alunos, ambientes e usuários) com tela de consulta.
+- **Tema claro/escuro** no frontend, com preferência persistida.
 
 ### Estrutura de páginas (frontend)
 
@@ -21,11 +23,13 @@ Aplicação web para gerenciar o uso de ambientes de ensino (salas de aula, labo
 | --- | --- | --- |
 | `/` | Página inicial | Público |
 | `/login` | Login do administrador | Público |
-| `/kiosk` | Terminal de check-in/out por matrícula | Público |
-| `/dashboard` | Visão de ocupação dos ambientes | Autenticado |
-| `/students` | Gestão de alunos | Autenticado |
-| `/rooms` | Gestão de ambientes | Autenticado |
-| `/attendance` | Histórico de presenças | Autenticado |
+| `/aluno/login` | Login do aluno (matrícula + senha) | Público |
+| `/aluno` | Área do aluno: check-in/out e histórico pessoal | Aluno |
+| `/dashboard` | Visão de ocupação dos ambientes | Admin |
+| `/students` | Gestão de alunos | Admin |
+| `/rooms` | Gestão de ambientes | Admin |
+| `/attendance` | Histórico geral de presenças | Admin |
+| `/audit-logs` | Consulta de auditoria das ações do admin | Admin |
 
 ---
 
@@ -47,6 +51,8 @@ Aplicação web para gerenciar o uso de ambientes de ensino (salas de aula, labo
 - **React Router 6**
 - **Axios** (cliente HTTP)
 - **Tailwind CSS 3**
+- **Vitest** + **Testing Library** para testes de componentes/páginas
+- **Playwright** (em `/e2e`) para testes end-to-end
 
 ### Infraestrutura
 - **Docker Compose** subindo a stack completa: PostgreSQL, backend (NestJS) e frontend (Nginx servindo o build do Vite).
@@ -128,72 +134,10 @@ Em outro terminal:
 ```bash
 cd frontend
 npm install
-npm run dev            # http://localhost:5173
+npm run dev            
 ```
 
 O frontend espera a API em `http://localhost:3333/api` (ver `frontend/src/services/api.ts`).
-
----
-
-## Estrutura do repositório
-
-```
-.
-├── docker-compose.yml          # PostgreSQL
-├── spec.md                     # Especificação do case
-├── backend/
-│   ├── drizzle.config.ts
-│   └── src/
-│       ├── main.ts             # bootstrap Nest
-│       ├── app.module.ts
-│       ├── auth/               # login, register, JWT guard
-│       ├── students/           # CRUD de alunos
-│       ├── rooms/              # CRUD de ambientes
-│       ├── attendance/         # check-in / check-out / histórico
-│       ├── kiosk/              # endpoints públicos do terminal
-│       └── database/
-│           ├── schema.ts       # tabelas Drizzle
-│           ├── migrate.ts
-│           └── migrations/
-└── frontend/
-    └── src/
-        ├── main.tsx
-        ├── App.tsx             # rotas
-        ├── pages/              # Home, Login, Kiosk, Dashboard, Students, Rooms, Attendance
-        ├── components/         # Layout, Modal, Button, Input, ProtectedRoute
-        ├── contexts/AuthContext.tsx
-        └── services/           # axios + chamadas por domínio
-```
-
----
-
-## Modelo de dados
-
-| Tabela | Campos principais |
-| --- | --- |
-| `users` | `id`, `name`, `email` (unique), `password_hash` |
-| `students` | `id`, `registration` (unique), `name`, `email` (unique) |
-| `rooms` | `id`, `name`, `type` (`classroom` / `laboratory` / `study_room`), `capacity` |
-| `attendances` | `id`, `student_id`, `room_id`, `check_in_at`, `check_out_at` (nullable) |
-
-Um `attendance` em aberto (`check_out_at IS NULL`) representa um aluno presente no ambiente.
-
----
-
-## API – principais endpoints
-
-Prefixo: `/api`. Salvo `auth/*` e `kiosk/*`, todas as rotas exigem `Authorization: Bearer <token>`.
-
-| Método | Rota | Descrição |
-| --- | --- | --- |
-| POST | `/auth/register` | Cria usuário admin |
-| POST | `/auth/login` | Retorna JWT |
-| GET | `/auth/me` | Usuário autenticado |
-| GET/POST/PATCH/DELETE | `/students` | CRUD de alunos |
-| GET/POST/PATCH/DELETE | `/rooms` | CRUD de ambientes |
-| GET/POST | `/attendance` | Lista e registra presenças |
-| POST | `/kiosk/check-in` | Check-in público por matrícula |
-| POST | `/kiosk/check-out` | Check-out público por matrícula |
 
 ---
 
@@ -207,7 +151,7 @@ npm run start:prod     # roda dist/
 npm run db:generate    # gera migration a partir do schema.ts
 npm run db:migrate     # aplica migrations
 npm run db:studio      # abre o Drizzle Studio
-npm test               # Jest
+npm test               # Jest (unit + integração: *.spec.ts e *.int-spec.ts)
 ```
 
 ### Frontend
@@ -215,15 +159,26 @@ npm test               # Jest
 npm run dev            # vite dev server
 npm run build          # build de produção
 npm run preview        # preview do build
+npm test               # Vitest (testes de componentes/páginas)
+npm run test:watch     # Vitest em modo watch
+npm run test:coverage  # Vitest com cobertura
 ```
 
+### E2E (Playwright) — `/e2e`
+
+Suite end-to-end que sobe backend + frontend + Postgres isolado e roda os fluxos no Chromium.
+
+```bash
+cd e2e
+npm install
+npm run db:up          # sobe Postgres de teste em localhost:5435 (profile=test)
+npm test               # roda os specs (backend e frontend são iniciados pelo Playwright)
+npm run test:headed    # mesma coisa, com navegador visível
+npm run test:ui        # modo interativo do Playwright
+npm run report         # abre o último relatório HTML
+npm run db:down        # derruba o Postgres de teste
+```
+
+O Postgres de teste usa porta `5435` e database `marista_test` (separado do dev em `5434`). Backend e frontend de teste sobem nas portas `4000` e `4173` via `webServer` do Playwright.
+
 ---
-
-## Próximos passos / TODO
-
-- [x] **Docker para subir tudo** — Compose com Postgres + backend + frontend (Nginx).
-- [ ] **Tema escuro** no frontend (toggle persistente, paleta via Tailwind).
-- [ ] **Observabilidade com Sentry** (plano gratuito) — captura de erros no backend (NestJS) e no frontend (React), com release/source maps.
-- [ ] **Auditoria das ações do administrador** — registrar quem criou/alterou/deletou alunos, ambientes e usuários, com tela de consulta (ator, ação, entidade, antes/depois, timestamp).
-- [ ] Testes e2e cobrindo o fluxo de check-in/check-out.
-- [ ] Métricas históricas de ocupação (não só o snapshot atual).
