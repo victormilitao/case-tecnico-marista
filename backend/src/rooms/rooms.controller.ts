@@ -12,6 +12,7 @@ import { AttendanceService } from '../attendance/attendance.service';
 import { RoomsService } from './rooms.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
+import { Audit } from '../audit/audit.decorator';
 import { Roles } from '../auth/roles.decorator';
 
 @Roles('admin')
@@ -22,6 +23,7 @@ export class RoomsController {
     private readonly attendanceService: AttendanceService,
   ) {}
 
+  @Audit('room', 'create')
   @Post()
   create(@Body() dto: CreateRoomDto) {
     return this.roomsService.create(dto);
@@ -42,11 +44,13 @@ export class RoomsController {
     return this.attendanceService.occupancyByRoom(id);
   }
 
+  @Audit('room', 'update')
   @Patch(':id')
   update(@Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateRoomDto) {
     return this.roomsService.update(id, dto);
   }
 
+  @Audit('room', 'delete')
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.roomsService.remove(id);

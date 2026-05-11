@@ -15,6 +15,7 @@ import { DashboardPage } from './pages/Dashboard';
 import { StudentsPage } from './pages/Students';
 import { RoomsPage } from './pages/Rooms';
 import { AttendancePage } from './pages/Attendance';
+import { AuditLogsPage } from './pages/AuditLogs';
 
 export default function App() {
   return (
@@ -31,6 +32,7 @@ export default function App() {
               <Route path="/attendance" element={<AttendancePage />} />
               <Route path="/students" element={<StudentsPage />} />
               <Route path="/rooms" element={<RoomsPage />} />
+              <Route path="/audit-logs" element={<AuditLogsPage />} />
             </Route>
           </Route>
 
