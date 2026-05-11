@@ -51,6 +51,8 @@ Aplicação web para gerenciar o uso de ambientes de ensino (salas de aula, labo
 - **React Router 6**
 - **Axios** (cliente HTTP)
 - **Tailwind CSS 3**
+- **Vitest** + **Testing Library** para testes de componentes/páginas
+- **Playwright** (em `/e2e`) para testes end-to-end
 
 ### Infraestrutura
 - **Docker Compose** subindo a stack completa: PostgreSQL, backend (NestJS) e frontend (Nginx servindo o build do Vite).
@@ -136,23 +138,6 @@ npm run dev
 ```
 
 O frontend espera a API em `http://localhost:3333/api` (ver `frontend/src/services/api.ts`).
-
----
-
-## API – principais endpoints
-
-Prefixo: `/api`. Salvo `auth/*` e `kiosk/*`, todas as rotas exigem `Authorization: Bearer <token>`.
-
-| Método | Rota | Descrição |
-| --- | --- | --- |
-| POST | `/auth/register` | Cria usuário admin |
-| POST | `/auth/login` | Retorna JWT |
-| GET | `/auth/me` | Usuário autenticado |
-| GET/POST/PATCH/DELETE | `/students` | CRUD de alunos |
-| GET/POST/PATCH/DELETE | `/rooms` | CRUD de ambientes |
-| GET/POST | `/attendance` | Lista e registra presenças |
-| POST | `/kiosk/check-in` | Check-in público por matrícula |
-| POST | `/kiosk/check-out` | Check-out público por matrícula |
 
 ---
 
